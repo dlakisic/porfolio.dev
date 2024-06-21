@@ -1,29 +1,35 @@
 ---
 import ExperienceItem from "./ExperienceItem.astro"
-const EXPERIENCIE = [
+const EXPERIENCE = [
   {
-    date: "Actualmente...",
-    title: "Creador de Contenido",
-    company: "Twitch",
+    date: "Novembre 2023 - Actuellement",
+    title: "Chargé d'exploration de l'Intelligence Artificielle",
+    company: "Additi Media",
     description:
-      "Divulgo sobre programación y desarrollo web en diferentes plataformas. Galardonado como mejor creador de contenido de habla no-inglesa en 2022 y mejor comunidad en 2023 por GitHub.",
-    link: "https://twitch.tv/midudev",
+      "Au sein de la Business Factory, mon rôle est de créer des solutions d'intelligence artificielle afin de faciliter le travail de mes collègues. J'ai notamment travaillé sur des projets de code review, analyse de conformité publicitaire, création automatisée de publicités.",
   },
   {
-    date: "Septiembre 2022",
-    title: "Principal Frontend Engineer",
-    company: "Adevinta Spain",
+    date: "Juillet - Septembre 2023",
+    title: "Data Manager",
+    company: "Vinci Facilities",
     description:
-      "Responsable de la plataforma, componentes y utilidades para la creación y desarrollo de aplicaciones web. Mejora de un 30% en la entrega de software. Implantación de medidas de integración continua y despliegue con A/B testing en más de 15 equipos.",
+      "J'ai pu administrer une base de données SAP, créer des tableaux de bord et initier la création d'un système de gestion de stocks.",
+  },
+  {
+    date: "Septembre 2020 - Mars 2023",
+    title: "Chef de Projet Data / IT",
+    company: "Ima.Go",
+    description:
+      "Agence de développement commercial dans laquelle j'ai pu optimiser les process de scraping, la gestion du CRM et la création de tableaux de bord automatisés",
   },
 ]
 ---
 
 <ol class="relative mt-16">
   {
-    EXPERIENCIE.map((experiencie) => (
+    EXPERIENCE.map((experience) => (
       <li class="">
-        <ExperienceItem {...experiencie} />
+        <ExperienceItem {...experience} />
       </li>
     ))
   }

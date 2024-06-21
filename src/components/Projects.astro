@@ -2,8 +2,12 @@
 import GitHub from "./icons/GitHub.astro"
 import NextJS from "./icons/NextJS.astro"
 import Tailwind from "./icons/Tailwind.astro"
+import Python from "./icons/Python.astro"
+import GoogleSheets from "./icons/GoogleSheets.astro"
+import Streamlit from "./icons/Streamlit.astro"
 import Link from "./icons/Link.astro"
 import LinkButton from "./LinkButton.astro"
+import Lepoool from "./icons/Lepoool.astro"
 
 const TAGS = {
   NEXT: {
@@ -16,24 +20,52 @@ const TAGS = {
     class: "bg-[#003159] text-white",
     icon: Tailwind,
   },
+  PYTHON: {
+    name: "Python",
+    class: "bg-[#306998] text-white",
+    icon: Python,
+  },
+  GOOGLE_SHEETS: {
+    name: "Google Sheets",
+    class: "bg-[#306998] text-white",
+    icon: GoogleSheets,
+  },
+  STREAMLIT: {
+    name: "Streamlit",
+    class: "bg-[#306998] text-white",
+    icon: Streamlit,
+  },
+  LEPOOOL: {
+    name: "Le Poool",
+    class: "bg-[#306998] text-white",
+    icon: Lepoool,
+  },
 }
 const PROJECTS = [
   {
-    title: "SVGL - A beautiful library with SVG logos",
+    title: "Bugdet Tracking - Crédit Agricole Google Sheets",
     description:
-      "Biblioteca de logos SVG de las marcas más populares. +10k visitas al mes. +2K svgs descargados. Creado desde cero con Next.js, React y Tailwind CSS.",
-    link: "https://svgl.vercel.app/",
-    github: "https://github.com/pheralb/svgl",
+      "Automatisation de la récupération des données de l'application Crédit Agricole pour un suivi des dépenses et des revenus.",
+    link: "https://docs.google.com/spreadsheets/d/1NvhKyCqQK515gzzyhcQUO0TfHJLnYhUB1hptQ-sZAT0/edit?usp=sharing",
+    github: "https://github.com/dlakisic/BudgetTracking_CreditAgricole_Gsheet",
     image: "/projects/svgl.webp",
-    tags: [TAGS.NEXT, TAGS.TAILWIND],
+    tags: [TAGS.PYTHON, TAGS.GOOGLE_SHEETS],
   },
   {
-    title: "AdventJS - Retos de programación con JavaScript y TypeScript",
+    title: "Anaylse de l'IPS des établissements scolaires français",
     description:
       "Plataforma gratuita con retos de programación. Más de 1 millón de visitas en un mes. +50K retos completados. Creada desde cero con Next.js, React y Tailwind CSS.",
     link: "https://adventjs.dev",
     image: "/projects/adventjs.webp",
-    tags: [TAGS.NEXT, TAGS.TAILWIND],
+    tags: [TAGS.PYTHON, TAGS.STREAMLIT],
+  },
+  {
+    title: "Hackathon des 10 ans de la French Tech",
+    description:
+      "En 24h, nous avons réalisé une solution qui permet d'adapter un article de journal à différentes audiences en utilisant l'IA. Nous avons remporté le 1er prix.",
+    link: "https://lepoool.tech/pour-les-10-ans-de-la-french-tech-nous-avons-teste-pour-vous-lia-generative-retour-sur-le-hackathon/",
+    image: "/projects/adventjs.webp",
+    tags: [TAGS.PYTHON, TAGS.STREAMLIT],
   },
 ]
 ---

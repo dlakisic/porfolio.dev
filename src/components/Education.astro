@@ -1,0 +1,37 @@
+---
+import EducationItem from "./EducationItem.astro"
+const EXPERIENCIE = [
+  {
+    date: "Septembre 2022 - Mars 2024",
+    diploma: "Msc Data Management",
+    school: "Paris School of Business / EFREI",
+    description:
+      "Divulgo sobre programación y desarrollo web en diferentes plataformas. Galardonado como mejor creador de contenido de habla no-inglesa en 2022 y mejor comunidad en 2023 por GitHub.",
+    link: "https://twitch.tv/midudev",
+  },
+  {
+    date: "Septembre 2020 - Juin 2022",
+    diploma: "MBA Expert en Marketing Digital",
+    school: "My Digital School",
+    description:
+      "Responsable de la plataforma, componentes y utilidades para la creación y desarrollo de aplicaciones web. Mejora de un 30% en la entrega de software. Implantación de medidas de integración continua y despliegue con A/B testing en más de 15 equipos.",
+  },
+  {
+    date: "Septembre 2016 - Juin 2019",
+    diploma: "Bachelor in Business and Management",
+    school: "EGC Normandie",
+    description:
+      "Responsable de la plataforma, componentes y utilidades para la creación y desarrollo de aplicaciones web. Mejora de un 30% en la entrega de software. Implantación de medidas de integración continua y despliegue con A/B testing en más de 15 equipos.",
+  },
+]
+---
+
+<ol class="relative mt-16">
+  {
+    EXPERIENCIE.map((experiencie) => (
+      <li class="">
+        <EducationItem {...experiencie} />
+      </li>
+    ))
+  }
+</ol>
