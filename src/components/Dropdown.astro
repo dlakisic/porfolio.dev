@@ -1,0 +1,146 @@
+---
+interface Props {
+  id: string
+  triggerClass?: string
+  menuClass?: string
+  menuPosition?: 'left' | 'right' | 'center'
+}
+
+const { 
+  id, 
+  triggerClass = "", 
+  menuClass = "", 
+  menuPosition = 'right' 
+} = Astro.props
+
+const positionClasses = {
+  left: 'left-0',
+  right: 'right-0', 
+  center: 'left-1/2 transform -translate-x-1/2'
+}
+---
+
+<div class="relative inline-block">
+  <button
+    id={`${id}-button`}
+    class={`${triggerClass}`}
+  >
+    <slot name="trigger" />
+  </button>
+  
+  <div
+    id={`${id}-menu`}
+    class={`dropdown-menu absolute hidden scale-80 top-8 ${positionClasses[menuPosition]} text-sm p-1 min-w-[8rem] rounded-md border border-gray-100 bg-white/90 dark:bg-gray-900/90 dark:border-gray-500/20 shadow-[0_3px_10px_rgb(0,0,0,0.2)] backdrop-blur-md ${menuClass}`}
+  >
+    <ul>
+      <slot name="menu" />
+    </ul>
+  </div>
+</div>
+
+<style>
+  .dropdown-menu.open {
+    display: inline;
+    animation: scale-up-center 0.15s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  }
+
+  @keyframes scale-up-center {
+    from {
+      transform: scale(0.8);
+      opacity: 0;
+    }
+
+    to {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+</style>
+
+<script>
+class DropdownManager {
+  constructor(dropdownId) {
+    this.dropdownId = dropdownId
+    this.button = document.getElementById(`${dropdownId}-button`)
+    this.menu = document.getElementById(`${dropdownId}-menu`)
+    this.isOpen = false
+    
+    if (this.button && this.menu) {
+      this.init()
+    }
+  }
+  
+  init() {
+    // Toggle dropdown on button click
+    this.button.addEventListener('click', (e) => {
+      e.stopPropagation()
+      this.closeOtherDropdowns()
+      this.toggle()
+    })
+    
+    // Close on outside click
+    document.addEventListener('click', () => {
+      this.close()
+    })
+    
+    // Close on escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        this.close()
+      }
+    })
+  }
+  
+  toggle() {
+    this.isOpen ? this.close() : this.open()
+  }
+  
+  open() {
+    this.menu.classList.add('open')
+    this.menu.classList.remove('hidden')
+    this.isOpen = true
+    
+    // Dispatch custom event for external listeners
+    window.dispatchEvent(new CustomEvent('dropdownOpened', {
+      detail: { dropdownId: this.dropdownId }
+    }))
+  }
+  
+  close() {
+    this.menu.classList.remove('open')
+    this.menu.classList.add('hidden')
+    this.isOpen = false
+    
+    // Dispatch custom event for external listeners
+    window.dispatchEvent(new CustomEvent('dropdownClosed', {
+      detail: { dropdownId: this.dropdownId }
+    }))
+  }
+  
+  closeOtherDropdowns() {
+    // Close all other dropdowns
+    const allDropdowns = document.querySelectorAll('.dropdown-menu')
+    allDropdowns.forEach(dropdown => {
+      if (dropdown.id !== `${this.dropdownId}-menu`) {
+        dropdown.classList.remove('open')
+        dropdown.classList.add('hidden')
+      }
+    })
+  }
+}
+
+// Auto-initialize dropdowns when DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+  // Find all dropdown buttons and initialize them
+  const dropdownButtons = document.querySelectorAll('[id$="-button"]')
+  dropdownButtons.forEach(button => {
+    const dropdownId = button.id.replace('-button', '')
+    if (document.getElementById(`${dropdownId}-menu`)) {
+      new DropdownManager(dropdownId)
+    }
+  })
+})
+
+// Export for manual initialization if needed
+window.DropdownManager = DropdownManager
+</script>

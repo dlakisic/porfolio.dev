@@ -1,0 +1,59 @@
+---
+// TreemapView.astro - Treemap visualization component
+---
+
+<div id="treemap-container" class="h-full w-full">
+  <svg id="treemap-svg" class="w-full h-full"></svg>
+</div>
+
+<script>
+  import { TreemapRenderer } from '../../scripts/clustering/TreemapRenderer.js';
+  
+  let treemapRenderer = null;
+
+  // Initialize when clustering is ready
+  window.addEventListener('clusteringReady', (event) => {
+    const { manager } = event.detail;
+    treemapRenderer = new TreemapRenderer(manager);
+    
+    // Setup dimensions and initial render
+    treemapRenderer.setupDimensions('treemap-container');
+    
+    // Only render if treemap mode is active
+    if (manager.currentMode === 'treemap') {
+      treemapRenderer.render();
+    }
+  });
+
+  // Listen for mode changes
+  window.addEventListener('modeChanged', (event) => {
+    const { mode } = event.detail;
+    const container = document.getElementById('treemap-container');
+    
+    if (mode === 'treemap') {
+      container.classList.remove('hidden');
+      if (treemapRenderer) {
+        treemapRenderer.render();
+      }
+    } else {
+      container.classList.add('hidden');
+    }
+  });
+
+  // Listen for node changes (zoom in/out, navigation)
+  window.addEventListener('nodeChanged', () => {
+    if (treemapRenderer && window.clusteringManager?.currentMode === 'treemap') {
+      treemapRenderer.render();
+    }
+  });
+</script>
+
+<style>
+  #treemap-svg {
+    font-family: 'Inter', sans-serif;
+  }
+
+  .node-group:hover rect {
+    stroke-width: 2px;
+  }
+</style>

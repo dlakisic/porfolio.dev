@@ -13,9 +13,17 @@ const translations = {
 
 // Helper function to get nested translation values
 function getNestedValue(obj: any, path: string): string {
-  return path.split('.').reduce((current, key) => {
+  const result = path.split('.').reduce((current, key) => {
     return current && typeof current === 'object' ? current[key] : undefined
-  }, obj) || path
+  }, obj)
+  
+  // If result is an object, return path as fallback to avoid [object Object]
+  if (typeof result === 'object' && result !== null) {
+    console.warn(`Translation key '${path}' returned an object, expected string`)
+    return path
+  }
+  
+  return result || path
 }
 
 export function useTranslations(lang?: SupportedLanguage) {

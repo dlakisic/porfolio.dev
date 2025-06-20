@@ -1,19 +1,68 @@
 ---
-// ExperienceItem now uses slots instead of props
+import TimelineItem from './TimelineItem.astro'
+import Typography from './Typography.astro'
+import LinkInline from './LinkInline.astro'
+import type { ExperienceItemProps } from '@/types/components'
+
+interface Props extends ExperienceItemProps {}
+
+const { 
+  title, 
+  company, 
+  date, 
+  location,
+  description, 
+  tags = [],
+  link,
+  variant = 'default',
+  ...rest 
+} = Astro.props
+
+// Force company to always be a string, no matter what
+const companyStr = String(company || 'Company name not available')
 ---
 
-<div
-  class="relative mx-12 pb-12 grid before:absolute before:left-[-35px] before:block before:h-full before:border-l-2 before:border-black/20 dark:before:border-white/15 before:content-[''] md:grid-cols-5 md:gap-10 md:space-x-4]"
->
-  <div class="relative pb-12 md:col-span-2">
-    <div class="sticky top-0">
-      <span class="text-yellow-400 -left-[42px] absolute rounded-full text-5xl"
-        >&bull;</span
-      >
-      <slot name="left-content" />
-    </div>
-  </div>
-  <div class="relative flex flex-col gap-2 pb-4 text-gray-600 dark:text-gray-300 md:col-span-3">
-    <slot name="right-content" />
-  </div>
-</div>
+<TimelineItem variant={variant} {...rest}>
+  <Fragment slot="timeline-header">
+    <Typography as="h3" variant="heading-5" color="primary">
+      {title}
+    </Typography>
+    <h4 class="font-semibold text-gray-600 dark:text-white">
+      {link ? (
+        <LinkInline href={link} external>
+          {companyStr}
+        </LinkInline>
+      ) : (
+        companyStr
+      )}
+    </h4>
+    <Typography as="time" variant="body-small" color="muted" class="p-0 m-0">
+      {date}
+    </Typography>
+    {location && (
+      <Typography as="p" variant="caption" color="muted">
+        {location}
+      </Typography>
+    )}
+  </Fragment>
+  
+  <Fragment slot="timeline-content">
+    {description && (
+      <Typography as="p" variant="body" class="mb-4">
+        {description}
+      </Typography>
+    )}
+    
+    {tags.length > 0 && (
+      <div class="flex flex-wrap gap-2 mt-2">
+        {tags.map((tag) => (
+          <span class="px-2 py-1 text-xs bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-md">
+            {tag}
+          </span>
+        ))}
+      </div>
+    )}
+    
+    <slot />
+  </Fragment>
+</TimelineItem>

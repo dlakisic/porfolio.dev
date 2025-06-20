@@ -1,0 +1,138 @@
+---
+// ClusteringDashboard.astro - Main dashboard component
+---
+
+<div class="flex flex-col h-screen">
+  <!-- Header -->
+  <div class="flex items-center justify-between p-4">
+    <h1 class="text-2xl font-bold tracking-tight">Écosystème du Poool</h1>
+  </div>
+  
+  <!-- Mode Toggle -->
+  <div class="flex justify-center space-x-4 p-4">
+    <button
+      id="treemap-btn"
+      class="px-4 py-2 rounded-md bg-primary text-primary-foreground transition-all"
+    >
+      Treemap
+    </button>
+    <button
+      id="scatter-btn"
+      class="px-4 py-2 rounded-md bg-secondary text-secondary-foreground transition-all"
+    >
+      Scatter Plot 3D
+    </button>
+  </div>
+
+  <!-- Loading State -->
+  <div id="loading-state" class="flex-1 flex items-center justify-center">
+    <div class="grid gap-4">
+      <div class="h-12 w-full bg-gray-200 dark:bg-gray-700 animate-pulse rounded"></div>
+      <div class="h-48 w-full bg-gray-200 dark:bg-gray-700 animate-pulse rounded"></div>
+      <div class="h-8 w-32 bg-gray-200 dark:bg-gray-700 animate-pulse rounded"></div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div id="main-content" class="flex-1 p-4 min-h-0 hidden">
+    <slot />
+  </div>
+</div>
+
+<script>
+  import { ClusteringManager } from '../../scripts/clustering/ClusteringManager.js';
+  
+  // Initialize clustering manager
+  const manager = new ClusteringManager();
+  
+  // Setup event listeners
+  document.addEventListener('DOMContentLoaded', () => {
+    // Mode toggle buttons
+    document.getElementById('treemap-btn').addEventListener('click', () => {
+      manager.switchMode('treemap');
+    });
+
+    document.getElementById('scatter-btn').addEventListener('click', () => {
+      manager.switchMode('scatter');
+    });
+
+    // Initialize the manager
+    manager.init();
+  });
+
+  // Listen for clustering ready event
+  window.addEventListener('clusteringReady', () => {
+    document.getElementById('loading-state').classList.add('hidden');
+    document.getElementById('main-content').classList.remove('hidden');
+  });
+
+  // Listen for clustering error event
+  window.addEventListener('clusteringError', (event) => {
+    const loadingState = document.getElementById('loading-state');
+    loadingState.innerHTML = `
+      <div class="text-center">
+        <div class="text-red-500 text-4xl mb-4">⚠️</div>
+        <p class="text-gray-600 dark:text-gray-300">Erreur lors du chargement des données</p>
+      </div>
+    `;
+  });
+
+  // Listen for mode changes
+  window.addEventListener('modeChanged', (event) => {
+    const { mode } = event.detail;
+    const treemapBtn = document.getElementById('treemap-btn');
+    const scatterBtn = document.getElementById('scatter-btn');
+    
+    if (mode === 'treemap') {
+      treemapBtn.className = 'px-4 py-2 rounded-md bg-primary text-primary-foreground transition-all';
+      scatterBtn.className = 'px-4 py-2 rounded-md bg-secondary text-secondary-foreground transition-all';
+    } else {
+      treemapBtn.className = 'px-4 py-2 rounded-md bg-secondary text-secondary-foreground transition-all';
+      scatterBtn.className = 'px-4 py-2 rounded-md bg-primary text-primary-foreground transition-all';
+    }
+  });
+
+  // Make manager globally available
+  window.clusteringManager = manager;
+</script>
+
+<style>
+  /* Custom styles for clustering visualization */
+  .bg-primary {
+    background-color: rgb(59 130 246);
+  }
+  
+  .text-primary-foreground {
+    color: white;
+  }
+  
+  .bg-secondary {
+    background-color: rgb(156 163 175);
+  }
+  
+  .text-secondary-foreground {
+    color: rgb(55 65 81);
+  }
+  
+  .dark .bg-secondary {
+    background-color: rgb(75 85 99);
+  }
+  
+  .dark .text-secondary-foreground {
+    color: rgb(243 244 246);
+  }
+
+  /* Loading animations */
+  @keyframes pulse {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: .5;
+    }
+  }
+
+  .animate-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+</style>

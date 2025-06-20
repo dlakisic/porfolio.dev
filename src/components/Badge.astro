@@ -1,10 +1,52 @@
-<div class="flex items-center ">
-<span class="relative inline-flex overflow-hidden rounded-full p-[1px]">
-  <span
-    class="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#51E4B8_0%,#21554E_50%,#51E4B8_100%)]"
-  ></span>
-  <div class="inline-flex items-center justify-center w-full px-3 py-1 text-sm text-green-800 bg-green-100 rounded-full cursor-pointer dark:bg-gray-800 dark:text-white/80 backdrop-blur-3xl whitespace-nowrap">
-    <slot />
+---
+import type { BadgeProps } from '@/types/components'
+
+interface Props extends BadgeProps {}
+
+const { 
+  variant = 'default', 
+  size = 'md', 
+  animated = false,
+  class: className = '',
+  ...rest 
+} = Astro.props
+
+const variants = {
+  default: 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200',
+  success: 'bg-green-100 text-green-800 dark:bg-gray-800 dark:text-white/80',
+  warning: 'bg-semantic-warning-50 text-semantic-warning-700 dark:bg-semantic-warning-900/20 dark:text-semantic-warning-300',
+  error: 'bg-semantic-error-50 text-semantic-error-700 dark:bg-semantic-error-900/20 dark:text-semantic-error-300',
+  primary: 'bg-primary-50 text-primary-700 dark:bg-primary-900/20 dark:text-primary-300',
+  outline: 'border border-gray-200 text-gray-600 dark:border-gray-700 dark:text-gray-400',
+}
+
+const sizes = {
+  sm: 'px-2 py-0.5 text-xs',
+  md: 'px-3 py-1 text-sm',
+  lg: 'px-4 py-1.5 text-base',
+}
+
+const badgeClass = `
+  inline-flex items-center justify-center rounded-full font-medium whitespace-nowrap
+  ${variants[variant]}
+  ${sizes[size]}
+  ${className}
+`.trim()
+---
+
+{animated ? (
+  <div class="flex items-center">
+    <span class="relative inline-flex overflow-hidden rounded-full p-[1px]">
+      <span
+        class="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#51E4B8_0%,#21554E_50%,#51E4B8_100%)]"
+      ></span>
+      <div class={badgeClass + ' backdrop-blur-3xl'} {...rest}>
+        <slot />
+      </div>
+    </span>
   </div>
-</span>
-</div>
+) : (
+  <span class={badgeClass} {...rest}>
+    <slot />
+  </span>
+)}

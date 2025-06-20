@@ -1,0 +1,134 @@
+---
+import type { IconProps } from '@/types/components'
+
+interface Props extends IconProps {}
+
+const {
+  name,
+  size = 'md',
+  color,
+  strokeWidth = 2,
+  rotate = 0,
+  flip,
+  class: className = '',
+  ...rest
+} = Astro.props
+
+// Size mappings
+const sizes = {
+  xs: 'size-3',
+  sm: 'size-4', 
+  md: 'size-6',
+  lg: 'size-8',
+  xl: 'size-12',
+  '2xl': 'size-16',
+}
+
+// Flip transformations
+const flipTransforms = {
+  horizontal: 'scaleX(-1)',
+  vertical: 'scaleY(-1)', 
+  both: 'scale(-1)',
+}
+
+// Construct transform styles
+const transforms = []
+if (rotate !== 0) transforms.push(`rotate(${rotate}deg)`)
+if (flip) transforms.push(flipTransforms[flip])
+const transformStyle = transforms.length > 0 ? transforms.join(' ') : undefined
+
+// Build final classes
+const sizeClass = sizes[size]
+const finalClass = [sizeClass, className].filter(Boolean).join(' ')
+
+// Dynamic icon loading - this maps to actual icon components
+const iconMap: Record<string, any> = {
+  // Social icons
+  'github': () => import('./icons/GitHub.astro'),
+  'linkedin': () => import('./icons/LinkedIn.astro'),
+  'mail': () => import('./icons/Mail.astro'),
+  
+  // UI icons
+  'sun': () => import('./icons/Sun.astro'),
+  'moon': () => import('./icons/Moon.astro'),
+  'system': () => import('./icons/System.astro'),
+  'calendar': () => import('./icons/Calendar.astro'),
+  'briefcase': () => import('./icons/Briefcase.astro'),
+  'code': () => import('./icons/Code.astro'),
+  'link': () => import('./icons/Link.astro'),
+  'cap': () => import('./icons/Cap.astro'),
+  'certifications': () => import('./icons/Certifications.astro'),
+  'webcam': () => import('./icons/Webcam.astro'),
+  
+  // Technology icons
+  'python': () => import('./icons/Python.astro'),
+  'nextjs': () => import('./icons/NextJS.astro'),
+  'react': () => import('./icons/React.astro'),
+  'typescript': () => import('./icons/TypeScript.astro'),
+  'tailwind': () => import('./icons/Tailwind.astro'),
+  'docker': () => import('./icons/Docker.astro'),
+  'postgresql': () => import('./icons/PostgreSQL.astro'),
+  'streamlit': () => import('./icons/Streamlit.astro'),
+  'googlesheets': () => import('./icons/GoogleSheets.astro'),
+  'fastapi': () => import('./icons/FastAPI.astro'),
+  'pandas': () => import('./icons/Pandas.astro'),
+  'numpy': () => import('./icons/NumPy.astro'),
+  'matplotlib': () => import('./icons/Matplotlib.astro'),
+  'seaborn': () => import('./icons/Seaborn.astro'),
+  'scikit-learn': () => import('./icons/Scikit_learn.astro'),
+  'keras': () => import('./icons/Keras.astro'),
+  'openai': () => import('./icons/OpenAI.astro'),
+  'ml': () => import('./icons/ML.astro'),
+  'd3': () => import('./icons/D3.astro'),
+  'apache-spark': () => import('./icons/Apache_Spark.astro'),
+  'airflow': () => import('./icons/Airflow.astro'),
+  'lambda': () => import('./icons/Lambda.astro'),
+  'bash': () => import('./icons/Bash.astro'),
+  'git': () => import('./icons/Git.astro'),
+  'pytest': () => import('./icons/Pytest.astro'),
+  
+  // Language icons
+  'en': () => import('./icons/EN.astro'),
+  'fr': () => import('./icons/FR.astro'),
+}
+
+// Get the icon component
+const IconComponent = iconMap[name.toLowerCase()]
+
+// If we have a mapped icon component, use it
+if (IconComponent) {
+  const { default: Icon } = await IconComponent()
+  
+  ---
+  <Icon 
+    class={finalClass}
+    style={{
+      color: color,
+      strokeWidth: strokeWidth,
+      transform: transformStyle
+    }}
+    {...rest}
+  />
+} else {
+  // Fallback for unmapped icons - generic SVG
+  ---
+  <svg
+    class={finalClass}
+    style={{
+      color: color,
+      strokeWidth: strokeWidth,
+      transform: transformStyle
+    }}
+    fill="none"
+    stroke="currentColor"
+    viewBox="0 0 24 24"
+    xmlns="http://www.w3.org/2000/svg"
+    {...rest}
+  >
+    <path
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"
+    />
+  </svg>
+}

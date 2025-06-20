@@ -1,0 +1,93 @@
+---
+// Breadcrumbs.astro - Navigation breadcrumbs component
+---
+
+<div id="breadcrumb-container" class="p-4 bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 hidden">
+  <nav class="flex" aria-label="Breadcrumb">
+    <ol id="breadcrumb-items" class="inline-flex items-center space-x-1 md:space-x-3">
+      <!-- Breadcrumb items will be populated by JavaScript -->
+    </ol>
+  </nav>
+</div>
+
+<script>
+  // Breadcrumb rendering function
+  window.renderBreadcrumbs = function(manager) {
+    const breadcrumbContainer = document.getElementById('breadcrumb-container');
+    const breadcrumbItems = document.getElementById('breadcrumb-items');
+    
+    if (!breadcrumbContainer || !breadcrumbItems) return;
+    
+    // Show/hide breadcrumb container based on navigation level
+    if (manager.breadcrumbAncestors.length <= 1) {
+      breadcrumbContainer.classList.add('hidden');
+      return;
+    }
+    
+    breadcrumbContainer.classList.remove('hidden');
+    breadcrumbItems.innerHTML = '';
+    
+    manager.breadcrumbAncestors.forEach((ancestor, index) => {
+      const isLast = index === manager.breadcrumbAncestors.length - 1;
+      const listItem = document.createElement('li');
+      listItem.className = 'inline-flex items-center';
+      
+      if (index > 0) {
+        // Add separator
+        const separator = document.createElement('svg');
+        separator.className = 'w-6 h-6 text-gray-400';
+        separator.setAttribute('fill', 'currentColor');
+        separator.setAttribute('viewBox', '0 0 20 20');
+        separator.innerHTML = '<path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>';
+        listItem.appendChild(separator);
+      }
+      
+      if (isLast) {
+        // Current page (non-clickable)
+        const span = document.createElement('span');
+        span.className = 'ml-1 text-sm font-medium text-gray-500 dark:text-gray-400 md:ml-2';
+        span.textContent = ancestor.name;
+        listItem.appendChild(span);
+      } else {
+        // Clickable breadcrumb
+        const link = document.createElement('a');
+        link.href = '#';
+        link.className = 'ml-1 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 md:ml-2 cursor-pointer';
+        link.textContent = ancestor.name;
+        
+        // Add click handler for navigation
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          manager.navigateToAncestor(index);
+        });
+        
+        listItem.appendChild(link);
+      }
+      
+      breadcrumbItems.appendChild(listItem);
+    });
+  };
+
+  // Initialize breadcrumbs when clustering is ready
+  window.addEventListener('clusteringReady', (event) => {
+    const { manager } = event.detail;
+    window.renderBreadcrumbs(manager);
+  });
+
+  // Update breadcrumbs when navigation changes
+  window.addEventListener('nodeChanged', () => {
+    if (window.clusteringManager) {
+      window.renderBreadcrumbs(window.clusteringManager);
+    }
+  });
+</script>
+
+<style>
+  #breadcrumb-container {
+    background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+  }
+  
+  .dark #breadcrumb-container {
+    background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+  }
+</style>

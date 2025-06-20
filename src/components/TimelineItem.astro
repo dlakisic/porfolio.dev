@@ -1,0 +1,44 @@
+---
+import type { TimelineItemProps } from '@/types/components'
+
+interface Props extends TimelineItemProps {}
+
+const {
+  variant = 'default',
+  class: className = '',
+  ...rest
+} = Astro.props
+
+// Variant styles
+const variants = {
+  default: {
+    container: 'relative mx-12 pb-12 grid before:absolute before:left-[-35px] before:block before:h-full before:border-l-2 before:border-black/20 dark:before:border-white/15 before:content-[\'\'] md:grid-cols-5 md:gap-10 md:space-x-4',
+    leftColumn: 'relative pb-12 md:col-span-2',
+    stickyWrapper: 'sticky top-0',
+    bullet: 'text-primary-500 -left-[42px] absolute rounded-full text-5xl',
+    rightColumn: 'relative flex flex-col gap-2 pb-4 text-gray-600 dark:text-gray-300 md:col-span-3'
+  },
+  compact: {
+    container: 'relative mx-8 pb-8 grid before:absolute before:left-[-25px] before:block before:h-full before:border-l-2 before:border-black/20 dark:before:border-white/15 before:content-[\'\'] md:grid-cols-4 md:gap-6',
+    leftColumn: 'relative pb-8 md:col-span-1',
+    stickyWrapper: 'sticky top-0',
+    bullet: 'text-primary-500 -left-[32px] absolute rounded-full text-4xl',
+    rightColumn: 'relative flex flex-col gap-1 pb-2 text-gray-600 dark:text-gray-300 md:col-span-3'
+  }
+}
+
+const variantClasses = variants[variant]
+const containerClass = [variantClasses.container, className].filter(Boolean).join(' ')
+---
+
+<div class={containerClass} {...rest}>
+  <div class={variantClasses.leftColumn}>
+    <div class={variantClasses.stickyWrapper}>
+      <span class={variantClasses.bullet}>&bull;</span>
+      <slot name="timeline-header" />
+    </div>
+  </div>
+  <div class={variantClasses.rightColumn}>
+    <slot name="timeline-content" />
+  </div>
+</div>

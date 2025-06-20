@@ -1,0 +1,87 @@
+---
+// ScatterView.astro - 3D Scatter plot visualization component
+---
+
+<div id="scatter-container" class="h-full w-full hidden">
+  <div class="flex h-full">
+    <!-- Plot principal -->
+    <div id="scatter-plot" class="flex-1 h-full relative">
+      <!-- Plotly will render here -->
+    </div>
+  </div>
+</div>
+
+<script>
+  import { ScatterRenderer } from '../../scripts/clustering/ScatterRenderer.js';
+  
+  let scatterRenderer = null;
+
+  // Initialize when clustering is ready
+  window.addEventListener('clusteringReady', (event) => {
+    const { manager } = event.detail;
+    scatterRenderer = new ScatterRenderer(manager);
+    
+    // Setup event listeners
+    setupScatterEventListeners(manager);
+  });
+
+  // Listen for mode changes
+  window.addEventListener('modeChanged', (event) => {
+    const { mode, manager } = event.detail;
+    const container = document.getElementById('scatter-container');
+    
+    if (mode === 'scatter') {
+      container.classList.remove('hidden');
+      if (scatterRenderer) {
+        scatterRenderer.render();
+        scatterRenderer.showLegend();
+        if (window.renderCustomLegend) {
+          window.renderCustomLegend(manager);
+        }
+      }
+    } else {
+      container.classList.add('hidden');
+    }
+  });
+
+  // Listen for cluster visibility changes
+  window.addEventListener('clusterVisibilityChanged', () => {
+    if (scatterRenderer && window.clusteringManager?.currentMode === 'scatter') {
+      scatterRenderer.updateVisibility();
+      if (window.renderCustomLegend) {
+        window.renderCustomLegend(window.clusteringManager);
+      }
+    }
+  });
+
+  // Listen for all clusters shown/hidden
+  window.addEventListener('allClustersShown', () => {
+    if (scatterRenderer && window.clusteringManager?.currentMode === 'scatter') {
+      scatterRenderer.updateVisibility();
+      if (window.renderCustomLegend) {
+        window.renderCustomLegend(window.clusteringManager);
+      }
+    }
+  });
+
+  window.addEventListener('allClustersHidden', () => {
+    if (scatterRenderer && window.clusteringManager?.currentMode === 'scatter') {
+      scatterRenderer.updateVisibility();
+      if (window.renderCustomLegend) {
+        window.renderCustomLegend(window.clusteringManager);
+      }
+    }
+  });
+
+  // Listen for cluster expansion changes
+  window.addEventListener('clusterExpansionChanged', () => {
+    if (window.clusteringManager?.currentMode === 'scatter' && window.renderCustomLegend) {
+      window.renderCustomLegend(window.clusteringManager);
+    }
+  });
+
+  function setupScatterEventListeners(manager) {
+    // No event listeners needed here as they are handled in CustomLegend component
+  }
+
+</script>

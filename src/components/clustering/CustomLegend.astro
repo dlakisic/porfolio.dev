@@ -1,0 +1,249 @@
+---
+// CustomLegend.astro - Custom legend component for scatter plot
+---
+
+<!-- Légende personnalisée pour desktop -->
+<div id="scatter-legend" class="w-72 h-full bg-white dark:bg-gray-900 border-l border-gray-200 dark:border-gray-700 p-4 overflow-hidden hidden rounded-xl relative z-10">
+  <div class="h-full flex flex-col">
+    <div class="flex items-center justify-between mb-4">
+      <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Clusters</h3>
+      <div class="flex gap-2">
+        <button
+          id="scatter-show-all"
+          class="px-2 py-1 text-xs bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 rounded hover:bg-blue-200 dark:hover:bg-blue-800 transition-colors"
+        >
+          All
+        </button>
+        <button
+          id="scatter-hide-all"
+          class="px-2 py-1 text-xs bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+        >
+          None
+        </button>
+      </div>
+    </div>
+    
+    <div id="scatter-legend-items" class="flex-1 overflow-y-auto space-y-2 pr-2">
+      <!-- Legend items will be populated by JavaScript -->
+    </div>
+  </div>
+</div>
+
+<!-- Legend Modal Button for Mobile -->
+<button
+  id="legend-modal-btn"
+  class="absolute bottom-4 right-4 z-10 px-4 py-2 bg-secondary text-secondary-foreground rounded-md hidden"
+>
+  Legend
+</button>
+
+<!-- Legend Modal -->
+<div id="legend-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+  <div class="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-md w-full mx-4 max-h-[50vh] overflow-y-auto">
+    <div class="flex justify-between items-center mb-4">
+      <h3 class="text-lg font-semibold">Cluster Legend</h3>
+      <button id="close-legend-modal" class="text-gray-500 hover:text-gray-700">&times;</button>
+    </div>
+    <div class="flex justify-between mb-4">
+      <button id="mobile-show-all" class="px-3 py-1 bg-gray-200 dark:bg-gray-600 rounded text-sm">Show All</button>
+      <button id="mobile-hide-all" class="px-3 py-1 bg-gray-200 dark:bg-gray-600 rounded text-sm">Hide All</button>
+    </div>
+    <div id="mobile-legend-items" class="space-y-2">
+      <!-- Mobile legend items will be populated by JavaScript -->
+    </div>
+  </div>
+</div>
+
+<script>
+  // Legend rendering function
+  window.renderCustomLegend = function(manager) {
+    const legendItemsContainer = document.getElementById('scatter-legend-items');
+    if (!legendItemsContainer) return;
+    
+    legendItemsContainer.innerHTML = '';
+    
+    // Sort clusters by number of companies (descending)
+    const sortedClusters = manager.getSortedClusters();
+    
+    sortedClusters.forEach(cluster => {
+      const isVisible = manager.isClusterVisible(cluster.name);
+      const isExpanded = manager.isClusterExpanded(cluster.name);
+      const companyCount = cluster.children.length;
+      
+      const legendItem = document.createElement('div');
+      legendItem.className = `p-3 rounded-lg border transition-all duration-200 hover:shadow-md ${
+        isVisible
+          ? 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-600 shadow-sm'
+          : 'bg-gray-50 dark:bg-gray-900 border-gray-100 dark:border-gray-800 opacity-60'
+      }`;
+      
+      // Function to render companies based on expanded state
+      const renderCompanies = () => {
+        if (!isVisible) return '';
+        
+        if (cluster.children.length <= 3) {
+          return `
+            <div class="mt-2 flex flex-wrap gap-1">
+              ${cluster.children.map(company => 
+                `<span class="px-2 py-1 text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded">
+                  ${company.name}
+                </span>`
+              ).join('')}
+            </div>
+          `;
+        }
+        
+        if (isExpanded) {
+          return `
+            <div class="mt-2 flex flex-wrap gap-1">
+              ${cluster.children.map(company => 
+                `<span class="px-2 py-1 text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded">
+                  ${company.name}
+                </span>`
+              ).join('')}
+              <span class="px-2 py-1 text-xs text-blue-400 dark:text-blue-500 cursor-pointer hover:text-blue-600 dark:hover:text-blue-300 transition-colors expand-btn" 
+                     data-cluster="${cluster.name}">
+                Réduire
+              </span>
+            </div>
+          `;
+        } else {
+          return `
+            <div class="mt-2 flex flex-wrap gap-1">
+              ${cluster.children.slice(0, 3).map(company => 
+                `<span class="px-2 py-1 text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded">
+                  ${company.name}
+                </span>`
+              ).join('')}
+              <span class="px-2 py-1 text-xs text-gray-400 dark:text-gray-500 cursor-pointer hover:text-gray-600 dark:hover:text-gray-300 transition-colors expand-btn" 
+                     data-cluster="${cluster.name}">
+                +${cluster.children.length - 3}
+              </span>
+            </div>
+          `;
+        }
+      };
+      
+      legendItem.innerHTML = `
+        <div class="flex items-center justify-between mb-2 cursor-pointer toggle-visibility" data-cluster="${cluster.name}">
+          <div class="flex items-center">
+            <div
+              class="w-4 h-4 rounded-full mr-3 border-2 border-white shadow-sm ${isVisible ? 'opacity-100' : 'opacity-50'}"
+              style="background-color: ${manager.getClusterColor(cluster.name)}"
+            ></div>
+            <span class="font-medium text-sm ${isVisible ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400'}">
+              ${cluster.name}
+            </span>
+          </div>
+          <div class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium ${
+            isVisible
+              ? 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300'
+              : 'bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400'
+          }">
+            ${isVisible ? '👁' : ''}
+          </div>
+        </div>
+        <div class="text-xs ${isVisible ? 'text-gray-600 dark:text-gray-300' : 'text-gray-400 dark:text-gray-500'}">
+          ${companyCount} entreprise${companyCount > 1 ? 's' : ''}
+        </div>
+        ${renderCompanies()}
+      `;
+      
+      // Event listeners
+      const toggleArea = legendItem.querySelector('.toggle-visibility');
+      toggleArea.addEventListener('click', (e) => {
+        e.stopPropagation();
+        manager.toggleClusterVisibility(cluster.name);
+      });
+      
+      const expandButton = legendItem.querySelector('.expand-btn');
+      if (expandButton) {
+        expandButton.addEventListener('click', (e) => {
+          e.stopPropagation();
+          manager.toggleClusterExpansion(cluster.name);
+        });
+      }
+      
+      legendItemsContainer.appendChild(legendItem);
+    });
+  };
+
+  // Mobile legend rendering function
+  window.renderMobileLegend = function(manager) {
+    const mobileContainer = document.getElementById('mobile-legend-items');
+    if (!mobileContainer) return;
+    
+    mobileContainer.innerHTML = '';
+    
+    manager.getSortedClusters().forEach(cluster => {
+      const isVisible = manager.isClusterVisible(cluster.name);
+      const item = document.createElement('div');
+      item.className = `flex items-center justify-between rounded-md p-2 hover:bg-gray-100 dark:hover:bg-gray-700 ${isVisible ? '' : 'opacity-50'}`;
+      
+      item.innerHTML = `
+        <div class="flex items-center">
+          <div class="mr-2 h-3 w-3 rounded-full" style="background-color: ${manager.getClusterColor(cluster.name)}"></div>
+          <span class="${isVisible ? '' : 'text-gray-400'}">${cluster.name}</span>
+        </div>
+        <input type="checkbox" ${isVisible ? 'checked' : ''} class="cluster-toggle" />
+      `;
+
+      item.querySelector('.cluster-toggle').addEventListener('change', () => {
+        manager.toggleClusterVisibility(cluster.name);
+      });
+
+      mobileContainer.appendChild(item);
+    });
+  };
+
+  // Initialize legend event listeners when ready
+  window.addEventListener('clusteringReady', (event) => {
+    const { manager } = event.detail;
+    
+    // Legend modal for mobile
+    document.getElementById('legend-modal-btn').addEventListener('click', () => {
+      document.getElementById('legend-modal').classList.remove('hidden');
+      window.renderMobileLegend(manager);
+    });
+
+    document.getElementById('close-legend-modal').addEventListener('click', () => {
+      document.getElementById('legend-modal').classList.add('hidden');
+    });
+
+    // Show/hide all buttons (desktop)
+    document.getElementById('scatter-show-all').addEventListener('click', () => {
+      manager.showAllClusters();
+    });
+
+    document.getElementById('scatter-hide-all').addEventListener('click', () => {
+      manager.hideAllClusters();
+    });
+
+    // Show/hide all buttons (mobile)
+    document.getElementById('mobile-show-all').addEventListener('click', () => {
+      manager.showAllClusters();
+    });
+
+    document.getElementById('mobile-hide-all').addEventListener('click', () => {
+      manager.hideAllClusters();
+    });
+  });
+</script>
+
+<style>
+  .bg-secondary {
+    background-color: rgb(156 163 175);
+  }
+  
+  .text-secondary-foreground {
+    color: rgb(55 65 81);
+  }
+  
+  .dark .bg-secondary {
+    background-color: rgb(75 85 99);
+  }
+  
+  .dark .text-secondary-foreground {
+    color: rgb(243 244 246);
+  }
+</style>

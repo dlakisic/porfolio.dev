@@ -1,11 +1,51 @@
 ---
-const { href } = Astro.props
+import type { LinkButtonProps } from '@/types/components'
+
+interface Props extends LinkButtonProps {}
+
+const { 
+  href, 
+  variant = 'primary', 
+  size = 'md', 
+  external = false,
+  download = false,
+  disabled = false,
+  class: className = '',
+  ...rest 
+} = Astro.props
+
+const variants = {
+  primary: 'text-white bg-gray-800 border-gray-600 hover:bg-gray-900 hover:border-gray-700 focus-ring',
+  secondary: 'text-gray-900 bg-white border-gray-300 hover:bg-gray-50 hover:border-gray-400 dark:text-white dark:bg-gray-800 dark:border-gray-600 dark:hover:bg-gray-700 focus-ring',
+  outline: 'text-primary-600 bg-transparent border-primary-600 hover:bg-primary-50 hover:text-primary-700 dark:text-primary-400 dark:border-primary-400 dark:hover:bg-primary-900/20 focus-ring',
+  ghost: 'text-gray-600 bg-transparent hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-100 focus-ring',
+}
+
+const sizes = {
+  sm: 'px-2.5 py-1.5 text-sm',
+  md: 'px-3 py-2 text-base',
+  lg: 'px-4 py-2.5 text-lg',
+}
+
+const linkClass = `
+  inline-flex items-center justify-center gap-2 font-medium transition
+  border rounded-full max-w-fit
+  ${variants[variant]}
+  ${sizes[size]}
+  ${disabled ? 'opacity-50 cursor-not-allowed pointer-events-none' : ''}
+  ${className}
+`.trim()
+
+const linkProps = {
+  href: disabled ? undefined : href,
+  role: 'link',
+  class: linkClass,
+  ...(external && { target: '_blank', rel: 'noopener noreferrer' }),
+  ...(download && { download: typeof download === 'string' ? download : '' }),
+  ...rest
+}
 ---
 
-<a
-  href={href}
-  role="link"
-  class="inline-flex items-center justify-center gap-2 px-3 py-2 space-x-2 text-base text-white transition bg-gray-800 border border-gray-600 focus-visible:ring-yellow-500/80 text-md hover:bg-gray-800 hover:border-gray-900 group max-w-fit rounded-full hover:text-white focus:outline-none focus-visible:outline-none focus-visible:ring focus-visible:ring-white focus-visible:ring-offset-2 active:bg-black"
->
+<a {...linkProps}>
   <slot />
 </a>

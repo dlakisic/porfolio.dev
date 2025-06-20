@@ -1,0 +1,93 @@
+---
+import type { TypographyProps } from '@/types/components'
+
+interface Props extends TypographyProps {}
+
+const { 
+  as: Tag = 'p',
+  variant = 'body',
+  color = 'default',
+  align = 'left',
+  gradient = false,
+  truncate = false,
+  class: className = '',
+  ...rest 
+} = Astro.props
+
+// Typography variant styles
+const variants = {
+  // Headings
+  'heading-1': 'text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight',
+  'heading-2': 'text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight',
+  'heading-3': 'text-2xl sm:text-3xl font-bold tracking-tight',
+  'heading-4': 'text-xl sm:text-2xl font-semibold tracking-tight',
+  'heading-5': 'text-lg sm:text-xl font-semibold',
+  'heading-6': 'text-base sm:text-lg font-semibold',
+  
+  // Subtitles
+  'subtitle-1': 'text-lg sm:text-xl font-medium',
+  'subtitle-2': 'text-base sm:text-lg font-medium',
+  
+  // Body text
+  'body-large': 'text-lg sm:text-xl leading-relaxed',
+  'body': 'text-base leading-relaxed',
+  'body-small': 'text-sm leading-relaxed',
+  
+  // Utility text
+  'caption': 'text-xs font-medium uppercase tracking-wide',
+  'overline': 'text-xs font-bold uppercase tracking-wider',
+}
+
+// Color styles
+const colors = {
+  default: 'text-gray-900 dark:text-white',
+  muted: 'text-gray-600 dark:text-gray-300',
+  primary: 'text-primary-500 dark:text-primary-400',
+  success: 'text-success-500 dark:text-success-400',
+  warning: 'text-warning-500 dark:text-warning-400',
+  error: 'text-error-500 dark:text-error-400',
+}
+
+// Alignment styles
+const alignments = {
+  left: 'text-left',
+  center: 'text-center',
+  right: 'text-right',
+}
+
+// Construct classes
+const variantClass = variants[variant] || variants.body
+const colorClass = gradient ? '' : colors[color]
+const alignClass = alignments[align]
+const truncateClass = truncate ? 'truncate' : ''
+const gradientClass = gradient ? 'text-gradient' : ''
+
+const finalClass = [
+  variantClass,
+  colorClass,
+  alignClass,
+  truncateClass,
+  gradientClass,
+  className
+].filter(Boolean).join(' ')
+---
+
+<Tag class={finalClass} {...rest}>
+  <slot />
+</Tag>
+
+<style>
+  .text-gradient {
+    background: linear-gradient(135deg, theme('colors.primary.500') 0%, theme('colors.primary.600') 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  .dark .text-gradient {
+    background: linear-gradient(135deg, theme('colors.primary.400') 0%, theme('colors.primary.500') 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+</style>

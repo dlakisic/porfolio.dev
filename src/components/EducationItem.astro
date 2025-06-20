@@ -1,44 +1,66 @@
 ---
-import LinkInline from "./LinkInline.astro"
+import TimelineItem from './TimelineItem.astro'
+import Typography from './Typography.astro'
+import LinkInline from './LinkInline.astro'
+import type { EducationItemProps } from '@/types/components'
 import { useTranslations, getCurrentLanguage } from '@/i18n/utils'
 
 const currentLang = getCurrentLanguage()
 const t = useTranslations(currentLang)
 
-interface Props {
-  diploma: string
-  school: string
-  description: string
+interface Props extends EducationItemProps {
   skills?: string
-  link?: string
-  date: string
 }
 
-const { diploma, school, description, skills, link, date } = Astro.props
+const { 
+  diploma, 
+  school, 
+  date, 
+  description,
+  skills,
+  grade,
+  location,
+  link,
+  variant = 'default',
+  ...rest 
+} = Astro.props
 ---
 
-<div
-  class="relative mx-12 pb-12 grid before:absolute before:left-[-35px] before:block before:h-full before:border-l-2 before:border-black/20 dark:before:border-white/15 before:content-[''] md:grid-cols-5 md:gap-10 md:space-x-4]"
->
-  <div class="relative pb-12 md:col-span-2">
-    <div class="sticky top-0">
-      <span class="text-yellow-400 -left-[42px] absolute rounded-full text-5xl"
-        >&bull;</span
-      >
-
-      <h3 class="text-xl font-bold text-yellow-400">{diploma}</h3>
-      <h4 class="font-semibold text-xl text-gray-600 dark:text-white">{school}</h4>
-      <time class="p-0 m-0 text-sm text-gray-600/80 dark:text-white/80">{date}</time>
-    </div>
-  </div>
-  <div class="relative flex flex-col gap-2 pb-4 text-gray-600 dark:text-gray-300 md:col-span-3">
-    <p class="mb-4">{description}</p>
+<TimelineItem variant={variant} {...rest}>
+  <Fragment slot="timeline-header">
+    <Typography as="h3" variant="heading-5" color="primary">
+      {diploma}
+    </Typography>
+    <Typography as="h4" variant="subtitle-2" class="font-semibold text-gray-600 dark:text-white">
+      {school}
+    </Typography>
+    <Typography as="time" variant="body-small" color="muted" class="p-0 m-0">
+      {date}
+    </Typography>
+    {location && (
+      <Typography as="p" variant="caption" color="muted">
+        {location}
+      </Typography>
+    )}
+    {grade && (
+      <Typography as="p" variant="caption" color="primary" class="font-medium">
+        {grade}
+      </Typography>
+    )}
+  </Fragment>
+  
+  <Fragment slot="timeline-content">
+    {description && (
+      <Typography as="p" variant="body" class="mb-4">
+        {description}
+      </Typography>
+    )}
     
     {skills && (
       <div class="mb-4">
         <div class="flex flex-wrap gap-2">
           {skills.split(' · ').map((skill) => (
-            <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">
+            <span class="bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-xs font-medium px-2.5 py-0.5 rounded">
               {skill.trim()}
             </span>
           ))}
@@ -46,27 +68,27 @@ const { diploma, school, description, skills, link, date } = Astro.props
       </div>
     )}
     
-    {
-      link && (
-        <a href={link} target="_blank" rel="noopener" class="inline-flex items-center text-yellow-500 dark:text-yellow-400 hover:underline">
-          <span data-i18n="education.learn_more">{t("education.learn_more")}</span>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="w-4 h-4 ml-1"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            stroke-width="2"
-            stroke="currentColor"
-            fill="none"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-            <path d="M9 6l6 6l-6 6" />
-          </svg>
-        </a>
-      )
-    }
-  </div>
-</div>
+    {link && (
+      <LinkInline href={link} external class="text-primary-500 dark:text-primary-400 hover:underline">
+        <span data-i18n="education.learn_more">{t("education.learn_more")}</span>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="w-4 h-4 ml-1 inline"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          stroke-width="2"
+          stroke="currentColor"
+          fill="none"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+          <path d="M9 6l6 6l-6 6" />
+        </svg>
+      </LinkInline>
+    )}
+    
+    <slot />
+  </Fragment>
+</TimelineItem>
