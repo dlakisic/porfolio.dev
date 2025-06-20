@@ -1,0 +1,72 @@
+---
+import LinkInline from "./LinkInline.astro"
+import { useTranslations, getCurrentLanguage } from '@/i18n/utils'
+
+const currentLang = getCurrentLanguage()
+const t = useTranslations(currentLang)
+
+interface Props {
+  diploma: string
+  school: string
+  description: string
+  skills?: string
+  link?: string
+  date: string
+}
+
+const { diploma, school, description, skills, link, date } = Astro.props
+---
+
+<div
+  class="relative mx-12 pb-12 grid before:absolute before:left-[-35px] before:block before:h-full before:border-l-2 before:border-black/20 dark:before:border-white/15 before:content-[''] md:grid-cols-5 md:gap-10 md:space-x-4]"
+>
+  <div class="relative pb-12 md:col-span-2">
+    <div class="sticky top-0">
+      <span class="text-yellow-400 -left-[42px] absolute rounded-full text-5xl"
+        >&bull;</span
+      >
+
+      <h3 class="text-xl font-bold text-yellow-400">{diploma}</h3>
+      <h4 class="font-semibold text-xl text-gray-600 dark:text-white">{school}</h4>
+      <time class="p-0 m-0 text-sm text-gray-600/80 dark:text-white/80">{date}</time>
+    </div>
+  </div>
+  <div class="relative flex flex-col gap-2 pb-4 text-gray-600 dark:text-gray-300 md:col-span-3">
+    <p class="mb-4">{description}</p>
+    
+    {skills && (
+      <div class="mb-4">
+        <div class="flex flex-wrap gap-2">
+          {skills.split(' · ').map((skill) => (
+            <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">
+              {skill.trim()}
+            </span>
+          ))}
+        </div>
+      </div>
+    )}
+    
+    {
+      link && (
+        <a href={link} target="_blank" rel="noopener" class="inline-flex items-center text-yellow-500 dark:text-yellow-400 hover:underline">
+          <span data-i18n="education.learn_more">{t("education.learn_more")}</span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="w-4 h-4 ml-1"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            stroke-width="2"
+            stroke="currentColor"
+            fill="none"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+            <path d="M9 6l6 6l-6 6" />
+          </svg>
+        </a>
+      )
+    }
+  </div>
+</div>

@@ -1,30 +1,221 @@
 ---
 import ExperienceItem from "./ExperienceItem.astro"
-const EXPERIENCIE = [
+import { useTranslations, getCurrentLanguage } from '../i18n/utils'
+
+const currentLang = getCurrentLanguage()
+const t = useTranslations(currentLang)
+
+const EXPERIENCE = [
   {
-    date: "Actualmente...",
-    title: "Creador de Contenido",
-    company: "Twitch",
-    description:
-      "Divulgo sobre programación y desarrollo web en diferentes plataformas. Galardonado como mejor creador de contenido de habla no-inglesa en 2022 y mejor comunidad en 2023 por GitHub.",
-    link: "https://twitch.tv/midudev",
+    id: "additi",
+    date: t('experience.additi_date'),
+    title: t('experience.additi_role'),
+    company: t('experience.additi_company'),
+    description: t('experience.additi_description'),
+    skills: ["Python", "LangChain", "AzureOpenAI", "FastAPI", "Docker"]
   },
   {
-    date: "Septiembre 2022",
-    title: "Principal Frontend Engineer",
-    company: "Adevinta Spain",
-    description:
-      "Responsable de la plataforma, componentes y utilidades para la creación y desarrollo de aplicaciones web. Mejora de un 30% en la entrega de software. Implantación de medidas de integración continua y despliegue con A/B testing en más de 15 equipos.",
+    id: "vinci",
+    date: t('experience.vinci_date'),
+    title: t('experience.vinci_role'),
+    company: t('experience.vinci_company'),
+    description: t('experience.vinci_description'),
+    skills: ["SAP", "Power BI", "SQL"]
   },
+  {
+    id: "imago",
+    date: t('experience.imago_date'),
+    title: t('experience.imago_role'),
+    company: t('experience.imago_company'),
+    description: t('experience.imago_description'),
+    skills: ["Python", "Selenium", "Looker Studio", "Zoho", "No-code"]
+  }
 ]
 ---
 
-<ol class="relative mt-16">
-  {
-    EXPERIENCIE.map((experiencie) => (
-      <li class="">
-        <ExperienceItem {...experiencie} />
-      </li>
-    ))
+<section id="experience" class="scroll-m-20">
+  <div class="flex flex-col">
+    {
+      EXPERIENCE.map(({ id, date, title, company, description, skills }) => (
+        <ExperienceItem>
+          <div slot="left-content">
+            <h3 class="text-xl font-bold text-yellow-400" data-translate={`experience.${id}_role`}>
+              {title}
+            </h3>
+            <h4 class="font-semibold text-xl text-gray-600 dark:text-white" data-translate={`experience.${id}_company`}>
+              {company}
+            </h4>
+            <time class="p-0 m-0 text-sm text-gray-600/80 dark:text-white/80" data-translate={`experience.${id}_date`}>
+              {date}
+            </time>
+          </div>
+          <div slot="right-content">
+            {(id === 'additi' || id === 'imago') && typeof description === 'object' ? (
+              <div class="experience-expandable relative" data-translate={`experience.${id}_description`}>
+                <p class="mb-4">{description.intro}</p>
+                <div class="projects-preview relative" style="min-height: 120px;">
+                  <div class="projects-container overflow-hidden transition-all duration-500 ease-in-out" data-projects style="max-height: 130px;">
+                    {description.projects?.map((project: any) => (
+                      <div class="mt-4">
+                        <h4 class="font-semibold text-sm mb-2">{project.title}</h4>
+                        <ul class="text-sm space-y-1 ml-4">
+                          {project.items?.map((item: any) => (
+                            <li>• <strong>{item.label} :</strong> {item.text}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+                  </div>
+                  <div class="flex items-center justify-center mt-3">
+                    <button 
+                      class="group flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors duration-200"
+                      data-toggle-btn
+                    >
+                      <div class="h-px w-24 bg-current"></div>
+                      <svg class="w-4 h-4 transition-transform duration-300 mx-1" data-icon fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                      </svg>
+                      <div class="h-px w-24 bg-current"></div>
+                    </button>
+                  </div>
+                  <div class="fade-overlay absolute inset-0 z-20" data-fade style="pointer-events: none;"></div>
+                </div>
+              </div>
+            ) : (
+              <p data-translate={`experience.${id}_description`}>
+                {typeof description === 'string' ? description : description.intro}
+              </p>
+            )}
+            <div class="flex flex-wrap gap-2 mt-4">
+              {skills.map((skill) => (
+                <span class="bg-blue-900 text-blue-300 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">
+                  {skill}
+                </span>
+              ))}
+            </div>
+          </div>
+        </ExperienceItem>
+      ))
+    }
+  </div>
+</section>
+
+<script>
+  import { getAvailableTranslations } from '../i18n/utils'
+  
+  const translations = getAvailableTranslations()
+  type LanguageKey = 'fr' | 'en'
+
+  function updateTranslations() {
+    const lang = (localStorage.getItem('lang') || 'fr') as LanguageKey
+    const elements = document.querySelectorAll<HTMLElement>('[data-translate]')
+    
+    elements.forEach(el => {
+      const key = el.getAttribute('data-translate')
+      if (key) {
+        const [section, item] = key.split('.')
+        try {
+          const sectionData = translations[lang]?.[section as keyof typeof translations[LanguageKey]]
+          const translation = sectionData?.[item]
+          
+          if (typeof translation === 'string') {
+            el.textContent = translation
+          } else if (typeof translation === 'object' && translation !== null) {
+            // Handle structured description for Additi and Ima.Go
+            if (key.includes('additi_description') || key.includes('imago_description')) {
+              const container = el as HTMLElement
+              const introP = container.querySelector('p')
+              const projectsContainer = container.querySelector('[data-projects]')
+              const toggleBtn = container.querySelector('[data-toggle-btn]')
+              const toggleText = container.querySelector('[data-text]')
+              
+              // Update intro
+              if (introP) {
+                introP.textContent = translation.intro
+              }
+              
+              // Update projects
+              if (projectsContainer) {
+                projectsContainer.innerHTML = ''
+                translation.projects?.forEach((project: any) => {
+                  const projectDiv = document.createElement('div')
+                  projectDiv.className = 'mt-4'
+                  
+                  const title = document.createElement('h4')
+                  title.className = 'font-semibold text-sm mb-2'
+                  title.textContent = project.title
+                  projectDiv.appendChild(title)
+                  
+                  const list = document.createElement('ul')
+                  list.className = 'text-sm space-y-1 ml-4'
+                  
+                  project.items?.forEach((item: any) => {
+                    const listItem = document.createElement('li')
+                    listItem.innerHTML = `• <strong>${item.label} :</strong> ${item.text}`
+                    list.appendChild(listItem)
+                  })
+                  
+                  projectDiv.appendChild(list)
+                  projectsContainer.appendChild(projectDiv)
+                })
+              }
+            }
+          }
+        } catch (error) {
+          console.warn(`Translation missing for ${key} in ${lang}`)
+        }
+      }
+    })
   }
-</ol>
+
+  document.addEventListener('astro:page-load', updateTranslations)
+  window.addEventListener('storage', (e) => {
+    if (e.key === 'lang') {
+      updateTranslations()
+    }
+  })
+
+  // Handle expand/collapse functionality
+  function initializeExpandables() {
+    const expandables = document.querySelectorAll('.experience-expandable')
+    
+    expandables.forEach(expandable => {
+      const toggleBtn = expandable.querySelector('[data-toggle-btn]') as HTMLButtonElement
+      const projectsContainer = expandable.querySelector('[data-projects]') as HTMLElement
+      const fadeOverlay = expandable.querySelector('[data-fade]') as HTMLElement
+      const toggleIcon = expandable.querySelector('[data-icon]') as HTMLElement
+      
+      if (!toggleBtn || !projectsContainer || !fadeOverlay || !toggleIcon) return
+      
+      let isExpanded = false
+      
+      toggleBtn.addEventListener('click', () => {
+        isExpanded = !isExpanded
+        
+        if (isExpanded) {
+          // Expand
+          const fullHeight = projectsContainer.scrollHeight + 40 // Add 40px for button space
+          projectsContainer.style.maxHeight = projectsContainer.scrollHeight + 'px'
+          expandable.querySelector('.projects-preview').style.minHeight = fullHeight + 'px'
+          fadeOverlay.style.opacity = '0'
+          toggleIcon.style.transform = 'rotate(180deg)'
+        } else {
+          // Collapse
+          projectsContainer.style.maxHeight = '130px'
+          expandable.querySelector('.projects-preview').style.minHeight = '120px'
+          fadeOverlay.style.opacity = '1'
+          toggleIcon.style.transform = 'rotate(0deg)'
+        }
+      })
+    })
+  }
+  
+  document.addEventListener('astro:page-load', initializeExpandables)
+</script>
+
+<style>
+  .blur-overlay {
+    -webkit-mask: linear-gradient(to top, black 0%, transparent 100%);
+    mask: linear-gradient(to top, black 0%, transparent 100%);
+  }
+</style>

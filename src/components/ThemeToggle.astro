@@ -102,6 +102,13 @@ const THEMES = ["Light", "Dark", "System"]
 
   document.getElementById("theme-toggle-btn").addEventListener("click", (e) => {
     e.stopPropagation()
+    // Close language menu if open
+    const languageMenu = document.getElementById('language-dropdown')
+    if (languageMenu) {
+      languageMenu.classList.remove('open')
+      languageMenu.classList.add('hidden')
+    }
+    
     const isClosed = !themesMenu.classList.contains("open")
     themesMenu.classList[isClosed ? "add" : "remove"]("open")
   })

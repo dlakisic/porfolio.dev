@@ -1,5 +1,9 @@
 ---
- const personalImageAlt = "Miguel Ángel"
+const personalImageAlt = "Dino Lakisic"
+import { useTranslations, getCurrentLanguage } from '../i18n/utils'
+
+const currentLang = getCurrentLanguage()
+const t = useTranslations(currentLang)
 ---
 
 <article class="flex flex-col items-center justify-center gap-8 text-gray-700 dark:text-gray-300 md:flex-row">
@@ -7,73 +11,75 @@
     class="[&>p]:mb-4 [&>p>strong]:text-yellow-500 dark:[&>p>strong]:text-yellow-100 [&>p>strong]:font-normal [&>p>strong]:font-mono text-pretty order-2 md:order-1"
   >
     <p>
-      Me llamo Miguel Ángel pero mis amigos me llaman midu. Empecé en la
-      programación con un Amstrad, tenía 10 años. Actualmente estoy <strong
-        >liderando equipos de desarrollo en multinacionales</strong
-      >.
+      <span data-translate="about.intro">{t('about.intro')}</span>
+      <strong data-translate="about.role">{t('about.role')}</strong>
+      <span data-translate="about.role_description">{t('about.role_description')}</span>
+      <strong data-translate="about.keyword_1">{t('about.keyword_1')}</strong>
+      <span data-translate="about.role_end">{t('about.role_end')}</span>
+      <strong data-translate="about.keyword_2">{t('about.keyword_2')}</strong>
+      <span data-translate="about.role_final">{t('about.role_final')}</span>
     </p>
 
     <p>
-      Algunos de mis éxitos incluyen <strong
-        >colaborar con Mozilla para el desarrollo de las primeras apps en su
-        sistema FirefoxOS</strong
-      >. Aunque hoy está desaparecido fue un gran avance en el mundo del
-      desarrollo web.
+      <span data-translate="about.approach_intro">{t('about.approach_intro')}</span>
+      <strong data-translate="about.keyword_3">{t('about.keyword_3')}</strong>
+      <span data-translate="about.approach_mid">{t('about.approach_mid')}</span>
+      <strong data-translate="about.keyword_4">{t('about.keyword_4')}</strong>
+      <span data-translate="about.approach_end">{t('about.approach_end')}</span>
     </p>
 
     <p>
-      Como creador de contenido, <strong
-        >cuento con el canal de habla hispana más visto del mundo en la
-        categoría de <em class="italic">Software & Game Development</em> en Twitch</strong
-      >. Mi objetivo es mejorar la empleabilidad de la comunidad hispana y el
-      acceso a contenido de calidad.
+      <span data-translate="about.value_intro">{t('about.value_intro')}</span>
+      <strong data-translate="about.keyword_5">{t('about.keyword_5')}</strong>
+      <span data-translate="about.value_mid">{t('about.value_mid')}</span>
+      <strong data-translate="about.keyword_6">{t('about.keyword_6')}</strong>
+      <span data-translate="about.value_end">{t('about.value_end')}</span>
+      <strong data-translate="about.keyword_7">{t('about.keyword_7')}</strong>
+      <span data-translate="about.final">{t('about.final')}</span>
     </p>
   </div>
 
-  <img width="200" height="200" src="/me.png" alt={personalImageAlt} class="order-1 object-cover w-64 h-full p-1 md:order-2 rotate-3 lg:p-2 lg:w-64 aspect-square rounded-2xl bg-black/20 dark:bg-yellow-500/5 ring-1 ring-black/70 dark:ring-white/20 " style="object-position: 50% 50%">
-
+  <img 
+    width="200" 
+    height="200" 
+    src="/Dino.webp" 
+    alt={personalImageAlt} 
+    class="order-1 object-cover w-64 h-full p-1 md:order-2 rotate-3 lg:p-2 lg:w-64 aspect-square rounded-2xl bg-black/20 dark:bg-yellow-500/5 ring-1 ring-black/70 dark:ring-white/20" 
+    style="object-position: 50% 50%"
+  >
 </article>
 
-<!-- FRASES PROHIBIDAS EN VUESTRO PORTFOLIO
+<script>
+  import { getAvailableTranslations } from '../i18n/utils'
+  
+  const translations = getAvailableTranslations()
+  type LanguageKey = 'fr' | 'en'
 
-<p>
-  Mi sueño es encontrar mi primer empleo en el mundo de la programación. Una empresa donde pueda seguir aprendiendo. ❌
-</p>
+  function updateTranslations() {
+    const lang = (localStorage.getItem('lang') || 'fr') as LanguageKey
+    const elements = document.querySelectorAll<HTMLElement>('[data-translate]')
+    
+    elements.forEach(el => {
+      const key = el.getAttribute('data-translate')
+      if (key) {
+        const [section, item] = key.split('.')
+        try {
+          const sectionData = translations[lang]?.[section as keyof typeof translations[LanguageKey]]
+          const translation = sectionData?.[item]
+          if (typeof translation === 'string') {
+            el.textContent = translation
+          }
+        } catch (error) {
+          console.warn(`Translation missing for ${key} in ${lang}`)
+        }
+      }
+    })
+  }
 
-<p>
-  ❌ Apasionado de la programación desde chekitito. Me encantan los ordenadores y crear páginas web buenas y rápidas con la última tecnología.
-</p>
-
-<p>
-  Trabajo bien en equipo. Siempre estoy aprendiendo cosas nuevas.
-</p>
-
--------------------------------------
-
---------------------------------------
-
-<p>
-  ¡Soy Leo! Estudié Derecho Empresarial y, tras años ejerciendo, me pasé al mundo de la Programación. Desde entonces disfruto creando experiencias web para los usuarios.
-</p>
-
-<p>
-  Entre mis éxitos destaco que durante el Grado Superior, ayudé a mis compañeros a aprender sobre TDD. Me encanta el testing, creo en su importancia, y me gusta compartir mi conocimiento sobre ello.
-</p>
-
-<p>
-  Cuento con experiencia desarrollando aplicaciones móviles, y he creado una iniciativa llamada X para mezclar mis dos pasiones: la programación y el derecho. Ayudando a la sociedad a acceso a una defensa justa.
-</p>
-
----------------------------------------
-
-<p>Me llamo Sara, tengo 25 años y soy de Santiago, Chile 🇨🇱. Terminé mis estudios como Desarrolladora Web. Me encanta enfocarme en la parte del rendimiento, para ofrecer la mejora experiencia al usuario.</p>
-
-<p>
-  Colaboro en la organización del MeetUp local BeerJS donde reunimos a desarrolladores de Santiago para compartir conocimiento y experiencias. El año 2023 hicimos un total de 25 charlas con más de 2000 asistentes.
-</p>
-
-<p>
-  Además de participar activamente en la comunidad, he participado en la Hackathon de Midudev quedando en 3er puesto con mi proyecto _Chatty_, donde usando IA podías interactuar con un PDF. ¡Échale un vistazo!
-</p>
-
--->
+  document.addEventListener('astro:page-load', updateTranslations)
+  window.addEventListener('storage', (e) => {
+    if (e.key === 'lang') {
+      updateTranslations()
+    }
+  })
+</script>

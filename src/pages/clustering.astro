@@ -1,0 +1,981 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import SectionContainer from "@/components/SectionContainer.astro";
+---
+
+<Layout
+  title="Clustering Le Poool - Visualisation Interactive"
+  description="Explorez l'écosystème startup du Poool avec des visualisations interactives"
+>
+  <div class="flex flex-col h-screen">
+    <!-- Header -->
+    <div class="flex items-center justify-between p-4">
+      <h1 class="text-2xl font-bold tracking-tight">Écosystème du Poool</h1>
+    </div>
+    
+    <!-- Mode Toggle -->
+    <div class="flex justify-center space-x-4 p-4">
+      <button
+        id="treemap-btn"
+        class="px-4 py-2 rounded-md bg-primary text-primary-foreground transition-all"
+      >
+        Treemap
+      </button>
+      <button
+        id="scatter-btn"
+        class="px-4 py-2 rounded-md bg-secondary text-secondary-foreground transition-all"
+      >
+        Scatter Plot 3D
+      </button>
+    </div>
+
+    <!-- Loading State -->
+    <div id="loading-state" class="flex-1 flex items-center justify-center">
+      <div class="grid gap-4">
+        <div class="h-12 w-full bg-gray-200 dark:bg-gray-700 animate-pulse rounded"></div>
+        <div class="h-48 w-full bg-gray-200 dark:bg-gray-700 animate-pulse rounded"></div>
+        <div class="h-8 w-32 bg-gray-200 dark:bg-gray-700 animate-pulse rounded"></div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div id="main-content" class="flex-1 p-4 min-h-0 hidden">
+      <!-- Breadcrumbs -->
+      <nav id="breadcrumbs" class="flex items-center space-x-1 p-2 text-sm flex-wrap hidden">
+        <!-- Breadcrumbs will be populated by JavaScript -->
+      </nav>
+      
+      <!-- Visualization Container -->
+      <div class="relative h-full">
+        <div id="treemap-container" class="h-full w-full">
+          <svg id="treemap-svg" class="w-full h-full"></svg>
+        </div>
+        <div id="scatter-container" class="h-full w-full hidden">
+          <div class="flex h-full">
+            <!-- Plot principal -->
+            <div id="scatter-plot" class="flex-1 h-full relative">
+              <!-- Plotly will render here -->
+            </div>
+            
+            <!-- Légende personnalisée pour desktop -->
+            <div id="scatter-legend" class="w-72 h-full bg-white dark:bg-gray-900 border-l border-gray-200 dark:border-gray-700 p-4 overflow-hidden hidden rounded-xl relative z-10">
+              <div class="h-full flex flex-col">
+                <div class="flex items-center justify-between mb-4">
+                  <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Clusters</h3>
+                  <div class="flex gap-2">
+                    <button
+                      id="scatter-show-all"
+                      class="px-2 py-1 text-xs bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 rounded hover:bg-blue-200 dark:hover:bg-blue-800 transition-colors"
+                    >
+                      All
+                    </button>
+                    <button
+                      id="scatter-hide-all"
+                      class="px-2 py-1 text-xs bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                    >
+                      None
+                    </button>
+                  </div>
+                </div>
+                
+                <div id="scatter-legend-items" class="flex-1 overflow-y-auto space-y-2 pr-2">
+                  <!-- Legend items will be populated by JavaScript -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Legend Modal Button for Mobile -->
+        <button
+          id="legend-modal-btn"
+          class="absolute bottom-4 right-4 z-10 px-4 py-2 bg-secondary text-secondary-foreground rounded-md hidden"
+        >
+          Legend
+        </button>
+      </div>
+    </div>
+
+    <!-- Legend Modal -->
+    <div id="legend-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+      <div class="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-md w-full mx-4 max-h-[50vh] overflow-y-auto">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-lg font-semibold">Cluster Legend</h3>
+          <button id="close-legend-modal" class="text-gray-500 hover:text-gray-700">&times;</button>
+        </div>
+        <div class="flex justify-between mb-4">
+          <button id="show-all-clusters" class="px-3 py-1 bg-gray-200 dark:bg-gray-600 rounded text-sm">Show All</button>
+          <button id="hide-all-clusters" class="px-3 py-1 bg-gray-200 dark:bg-gray-600 rounded text-sm">Hide All</button>
+        </div>
+        <div id="legend-items" class="space-y-2">
+          <!-- Legend items will be populated by JavaScript -->
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<script>
+  // Load external libraries
+  const loadScript = (src) => {
+    return new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = src;
+      script.onload = resolve;
+      script.onerror = reject;
+      document.head.appendChild(script);
+    });
+  };
+
+  // Clustering Visualization Manager - Similar to React version
+  class ClusteringVisualization {
+    constructor() {
+      this.data = null;
+      this.currentMode = 'treemap';
+      this.colors = {};
+      this.visibleClusters = new Set();
+      this.dimensions = { width: 0, height: 0 };
+      this.currentRootNode = null;
+      this.initialHierarchy = null;
+      this.previousRootNodeRef = null;
+      this.xScale = null;
+      this.yScale = null;
+      this.init();
+    }
+
+    async init() {
+      try {
+        // Load external libraries
+        await Promise.all([
+          loadScript('https://d3js.org/d3.v7.min.js'),
+          loadScript('https://cdn.plot.ly/plotly-3.0.1.min.js')
+        ]);
+
+        // Initialize D3 scales after libraries are loaded
+        this.xScale = d3.scaleLinear();
+        this.yScale = d3.scaleLinear();
+        
+        // Load data and setup
+        await this.loadData();
+        this.setupEventListeners();
+        this.calculateInitialHierarchy();
+        this.setupDimensions();
+        
+        // Show main content and hide loading
+        document.getElementById('loading-state').classList.add('hidden');
+        document.getElementById('main-content').classList.remove('hidden');
+        
+        // Render initial visualization
+        this.renderVisualization();
+        
+      } catch (error) {
+        console.error('Failed to initialize visualization:', error);
+        this.showError();
+      }
+    }
+
+    async loadData() {
+      const response = await fetch('/data/mock-data.json');
+      this.data = await response.json();
+      
+      // Extract colors and setup visible clusters
+      this.colors = this.data.cluster_colors || {};
+      this.data.children.forEach(cluster => {
+        if (!this.colors[cluster.name]) {
+          this.colors[cluster.name] = this.generateColor();
+        }
+        this.visibleClusters.add(cluster.name);
+      });
+    }
+
+    generateColor() {
+      const colors = [
+        '#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd',
+        '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf'
+      ];
+      return colors[Math.floor(Math.random() * colors.length)];
+    }
+
+    calculateInitialHierarchy() {
+      if (!this.data) return;
+      
+      try {
+        const hierarchy = d3.hierarchy(this.data)
+          .sum(d => d.value || 1)
+          .sort((a, b) => (b.value || 0) - (a.value || 0));
+
+        const treemapLayout = d3.treemap().size([1000, 1000]);
+        treemapLayout(hierarchy);
+        
+        this.initialHierarchy = hierarchy;
+        this.currentRootNode = hierarchy;
+        this.previousRootNodeRef = hierarchy;
+      } catch (error) {
+        console.error('Error calculating hierarchy:', error);
+        this.initialHierarchy = this.createEmptyHierarchy();
+        this.currentRootNode = this.initialHierarchy;
+      }
+    }
+
+    createEmptyHierarchy() {
+      const emptyData = { name: "empty", children: [] };
+      const hierarchy = d3.hierarchy(emptyData).sum(() => 1);
+      d3.treemap().size([1,1])(hierarchy);
+      return hierarchy;
+    }
+
+    setupDimensions() {
+      const container = document.getElementById('treemap-container');
+      if (container) {
+        this.dimensions.width = container.clientWidth;
+        this.dimensions.height = container.clientHeight;
+        
+        // Setup resize listener
+        const resizeObserver = new ResizeObserver(() => {
+          this.dimensions.width = container.clientWidth;
+          this.dimensions.height = container.clientHeight;
+          if (this.currentMode === 'treemap') {
+            this.renderTreemap();
+          }
+        });
+        resizeObserver.observe(container);
+      }
+    }
+
+    setupEventListeners() {
+      // Mode toggle buttons
+      document.getElementById('treemap-btn').addEventListener('click', () => {
+        this.switchMode('treemap');
+      });
+
+      document.getElementById('scatter-btn').addEventListener('click', () => {
+        this.switchMode('scatter');
+      });
+
+      // Legend modal for mobile
+      document.getElementById('legend-modal-btn').addEventListener('click', () => {
+        document.getElementById('legend-modal').classList.remove('hidden');
+      });
+
+      document.getElementById('close-legend-modal').addEventListener('click', () => {
+        document.getElementById('legend-modal').classList.add('hidden');
+      });
+
+      document.getElementById('show-all-clusters').addEventListener('click', () => {
+        this.data.children.forEach(cluster => {
+          this.visibleClusters.add(cluster.name);
+        });
+        this.renderVisualization();
+        this.renderLegend();
+      });
+
+      document.getElementById('hide-all-clusters').addEventListener('click', () => {
+        this.visibleClusters.clear();
+        this.renderVisualization();
+        this.renderLegend();
+      });
+    }
+
+    switchMode(mode) {
+      this.currentMode = mode;
+      
+      // Update button styles
+      const treemapBtn = document.getElementById('treemap-btn');
+      const scatterBtn = document.getElementById('scatter-btn');
+      
+      if (mode === 'treemap') {
+        treemapBtn.className = 'px-4 py-2 rounded-md bg-primary text-primary-foreground transition-all';
+        scatterBtn.className = 'px-4 py-2 rounded-md bg-secondary text-secondary-foreground transition-all';
+        document.getElementById('treemap-container').classList.remove('hidden');
+        document.getElementById('scatter-container').classList.add('hidden');
+        document.getElementById('breadcrumbs').classList.remove('hidden');
+      } else {
+        treemapBtn.className = 'px-4 py-2 rounded-md bg-secondary text-secondary-foreground transition-all';
+        scatterBtn.className = 'px-4 py-2 rounded-md bg-primary text-primary-foreground transition-all';
+        document.getElementById('treemap-container').classList.add('hidden');
+        document.getElementById('scatter-container').classList.remove('hidden');
+        document.getElementById('breadcrumbs').classList.add('hidden');
+      }
+      
+      // Show legend button on mobile for scatter mode
+      const isMobile = window.innerWidth <= 500;
+      if (mode === 'scatter' && isMobile) {
+        document.getElementById('legend-modal-btn').classList.remove('hidden');
+      } else {
+        document.getElementById('legend-modal-btn').classList.add('hidden');
+      }
+      
+      this.renderVisualization();
+    }
+
+    renderVisualization() {
+      if (this.currentMode === 'treemap') {
+        this.renderTreemap();
+        this.renderBreadcrumbs();
+      } else {
+        this.renderScatter();
+      }
+      this.renderLegend();
+    }
+
+    renderTreemap() {
+      if (!this.currentRootNode || this.dimensions.width === 0) return;
+      
+      const svg = d3.select('#treemap-svg');
+      const { width, height } = this.dimensions;
+      
+      // Setup SVG
+      svg.attr('viewBox', `0 0 ${width} ${height}`)
+         .style('width', '100%')
+         .style('height', '100%');
+
+      // Setup scales
+      this.xScale.domain([this.currentRootNode.x0, this.currentRootNode.x1]).range([0, width]);
+      this.yScale.domain([this.currentRootNode.y0, this.currentRootNode.y1]).range([0, height]);
+
+      // Clear previous
+      svg.selectAll('*').remove();
+      
+      // Main treemap group
+      const treemapG = svg.append('g').attr('class', 'treemap-group');
+      
+      // Determine nodes to render
+      let nodeDataForBinding = [];
+      const isCompanyDetailView = this.currentRootNode.depth === 2;
+      
+      if (isCompanyDetailView) {
+        nodeDataForBinding = [this.currentRootNode];
+        this.renderCompanyDetails(svg, this.currentRootNode.data);
+      } else if (this.currentRootNode.depth === 1 || this.currentRootNode.depth === 0) {
+        nodeDataForBinding = this.currentRootNode.children || [];
+      }
+
+      // Render nodes
+      const nodes = treemapG.selectAll('g.node-group')
+        .data(nodeDataForBinding, d => d.data.name + d.depth)
+        .enter()
+        .append('g')
+        .attr('class', d => `node-group ${d.children ? 'cluster-node' : 'company-node'} depth-${d.depth}`)
+        .attr('transform', d => `translate(${this.xScale(d.x0)},${this.yScale(d.y0)})`);
+
+      // Add rectangles
+      nodes.append('rect')
+        .attr('class', 'node')
+        .attr('width', d => Math.max(0, this.xScale(d.x1) - this.xScale(d.x0)))
+        .attr('height', d => Math.max(0, this.yScale(d.y1) - this.yScale(d.y0)))
+        .attr('fill', d => this.colors[d.depth === 1 ? d.data.name : d.parent?.data.name] || '#cccccc')
+        .attr('stroke', '#333')
+        .attr('stroke-width', 1);
+
+      // Add content (titles, logos, etc.)
+      nodes.each((d, i, nodes) => {
+        const g = d3.select(nodes[i]);
+        const width = Math.max(0, this.xScale(d.x1) - this.xScale(d.x0));
+        const height = Math.max(0, this.yScale(d.y1) - this.yScale(d.y0));
+        
+        if (d.children) {
+          // Cluster title
+          this.addClusterTitle(g, d, width, height);
+        } else {
+          // Company content
+          this.addCompanyContent(g, d, width, height);
+        }
+        
+        // Add click handler
+        if (!isCompanyDetailView) {
+          g.style('cursor', 'pointer')
+           .on('click', () => this.zoomIn(d));
+        }
+      });
+
+      // Add zoom out click handler
+      svg.on('click', (event) => {
+        if (event.target === svg.node()) {
+          this.zoomOut();
+        }
+      });
+    }
+
+    addClusterTitle(g, d, width, height) {
+      const fontSize = Math.min(18, Math.max(9, width / 8));
+      
+      g.append('foreignObject')
+       .attr('width', width)
+       .attr('height', height)
+       .attr('x', 0)
+       .attr('y', 0)
+       .style('opacity', width > 40 && height > 30 ? 1 : 0)
+       .html(`
+         <div xmlns="http://www.w3.org/1999/xhtml" style="
+           width: 100%; height: 100%; display: flex; align-items: center; 
+           justify-content: center; text-align: center; color: white; 
+           font-weight: bold; font-size: ${fontSize}px; padding: 5px; 
+           overflow: hidden; word-wrap: break-word; box-sizing: border-box;
+         ">
+           ${d.data.name}
+         </div>
+       `);
+    }
+
+    addCompanyContent(g, d, width, height) {
+      const showLogo = width > 50 && height > 50 && d.data.logo;
+      const showText = !showLogo && width > 30 && height > 20;
+      
+      if (showLogo) {
+        const logoWidth = width * 0.6;
+        const logoHeight = height * 0.5;
+        
+        g.append('image')
+         .attr('href', d.data.logo)
+         .attr('x', (width - logoWidth) / 2)
+         .attr('y', height * 0.15)
+         .attr('width', logoWidth)
+         .attr('height', logoHeight)
+         .attr('preserveAspectRatio', 'xMidYMid meet')
+         .on('error', function() { this.style.opacity = 0; });
+      }
+      
+      if (showText) {
+        const fontSize = Math.min(16, Math.max(10, width / 10));
+        
+        g.append('foreignObject')
+         .attr('width', width)
+         .attr('height', height)
+         .attr('x', 0)
+         .attr('y', 0)
+         .html(`
+           <div xmlns="http://www.w3.org/1999/xhtml" style="
+             width: 100%; height: 100%; display: flex; align-items: center; 
+             justify-content: center; padding: 5px; box-sizing: border-box;
+           ">
+             <div style="
+               color: white; font-weight: bold; font-size: ${fontSize}px; 
+               text-align: center; overflow: hidden; text-overflow: ellipsis; 
+               display: -webkit-box; -webkit-line-clamp: 3; 
+               -webkit-box-orient: vertical; word-wrap: break-word;
+             ">
+               ${d.data.name}
+             </div>
+           </div>
+         `);
+      }
+    }
+
+    renderCompanyDetails(svg, company) {
+      const { width, height } = this.dimensions;
+      
+      const detailsG = svg.append('g').attr('class', 'company-details-group');
+      detailsG.append('rect')
+              .attr('class', 'details-background')
+              .attr('x', 0)
+              .attr('y', 0)
+              .attr('width', width)
+              .attr('height', height)
+              .attr('fill', 'rgba(0,0,0,0.9)');
+
+      const foreignObject = detailsG.append('foreignObject')
+                                   .attr('x', 0)
+                                   .attr('y', 0)
+                                   .attr('width', width)
+                                   .attr('height', height);
+
+      // Company details HTML similar to React component
+      foreignObject.html(`
+        <div xmlns="http://www.w3.org/1999/xhtml" style="
+          width: 100%; height: 100%; color: white; padding: 15px; 
+          overflow-y: auto; box-sizing: border-box; 
+          font-family: system-ui, sans-serif; display: flex; flex-direction: column;
+        ">
+          <div>
+            <h3 style="margin: 0 0 5px 0; font-size: 1.25rem; font-weight: bold;">
+              ${company.name}
+            </h3>
+            ${company.sector ? `<p style="margin: 0 0 10px 0; font-size: 0.875rem; opacity: 0.8;">Sector: ${company.sector}</p>` : ''}
+          </div>
+          
+          ${company.logo ? `
+            <div style="text-align: center; margin: 15px 0;">
+              <img src="${company.logo}" alt="${company.name} logo" 
+                   style="max-width: 80%; max-height: 150px; object-fit: contain;"
+                   onerror="this.style.display='none'" />
+            </div>
+          ` : ''}
+          
+          <div style="margin-top: 10px;">
+            ${company.activiteFr ? `
+              <div>
+                <h4 style="margin: 0 0 5px 0; font-size: 0.875rem; font-weight: 600;">Activity</h4>
+                <p style="margin: 0 0 15px 0; font-size: 0.875rem;">${company.activiteFr}</p>
+              </div>
+            ` : ''}
+            
+            ${company.description && company.description !== company.activiteFr ? `
+              <div>
+                <h4 style="margin: 0 0 5px 0; font-size: 0.875rem; font-weight: 600;">Description</h4>
+                <p style="margin: 0 0 15px 0; font-size: 0.875rem;">${company.description}</p>
+              </div>
+            ` : ''}
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 20px;">
+              ${company.technologies ? `
+                <div>
+                  <h4 style="margin: 0 0 5px 0; font-size: 0.875rem; font-weight: 600;">Technologies</h4>
+                  <p style="margin: 0; font-size: 0.875rem;">${company.technologies}</p>
+                </div>
+              ` : ''}
+              
+              ${company.date_creation ? `
+                <div>
+                  <h4 style="margin: 0 0 5px 0; font-size: 0.875rem; font-weight: 600;">Founded</h4>
+                  <p style="margin: 0; font-size: 0.875rem;">${company.date_creation}</p>
+                </div>
+              ` : ''}
+            </div>
+            
+            <div>
+              <h4 style="margin: 0 0 5px 0; font-size: 0.875rem; font-weight: 600;">Links</h4>
+              <div style="display: flex; gap: 15px; align-items: center; margin-top: 5px;">
+                ${company.site_web ? `
+                  <a href="${company.site_web}" target="_blank" rel="noopener noreferrer" 
+                     style="color: #93c5fd; text-decoration: none;">Website</a>
+                ` : ''}
+                ${company.linkedin ? `
+                  <a href="${company.linkedin}" target="_blank" rel="noopener noreferrer"
+                     style="color: #93c5fd; text-decoration: none;">LinkedIn</a>
+                ` : ''}
+              </div>
+            </div>
+          </div>
+        </div>
+      `);
+    }
+
+    zoomIn(node) {
+      this.previousRootNodeRef = this.currentRootNode;
+      this.currentRootNode = node;
+      this.renderVisualization();
+    }
+
+    zoomOut() {
+      if (this.currentRootNode && this.currentRootNode.parent) {
+        this.previousRootNodeRef = this.currentRootNode;
+        this.currentRootNode = this.currentRootNode.parent;
+        this.renderVisualization();
+      }
+    }
+
+    renderBreadcrumbs() {
+      const breadcrumbsContainer = document.getElementById('breadcrumbs');
+      if (!this.currentRootNode || this.currentRootNode.depth === 0) {
+        breadcrumbsContainer.classList.add('hidden');
+        return;
+      }
+      
+      breadcrumbsContainer.classList.remove('hidden');
+      const ancestors = this.currentRootNode.ancestors().reverse().slice(0, -1);
+      
+      // Clear previous content
+      breadcrumbsContainer.innerHTML = '';
+      
+      // Create breadcrumb items
+      ancestors.forEach((node, index) => {
+        const breadcrumbItem = document.createElement('div');
+        breadcrumbItem.className = 'flex items-center';
+        
+        const button = document.createElement('button');
+        button.className = 'flex items-center rounded-md px-2 py-1 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors';
+        
+        if (node.depth === 0) {
+          button.innerHTML = `
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-1 h-3 w-3" aria-hidden="true">
+              <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"></path>
+              <path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+            </svg><span>All Clusters</span>
+          `;
+        } else {
+          button.innerHTML = `<span>${node.data.name || 'Parent'}</span>`;
+        }
+        
+        // Add click event listener
+        button.addEventListener('click', () => {
+          this.navigateToNode(node);
+        });
+        
+        breadcrumbItem.appendChild(button);
+        
+        // Add chevron separator
+        const chevron = document.createElement('div');
+        chevron.innerHTML = `
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mx-1 text-gray-400">
+            <path d="m9 18 6-6-6-6"/>
+          </svg>
+        `;
+        breadcrumbItem.appendChild(chevron);
+        
+        breadcrumbsContainer.appendChild(breadcrumbItem);
+      });
+      
+      // Add current node (non-clickable)
+      const currentItem = document.createElement('span');
+      currentItem.className = 'rounded-md bg-gray-200 dark:bg-gray-700 px-2 py-1 font-medium';
+      currentItem.textContent = this.currentRootNode.data.name;
+      breadcrumbsContainer.appendChild(currentItem);
+    }
+
+    navigateToNode(targetNode) {
+      if (targetNode) {
+        this.previousRootNodeRef = this.currentRootNode;
+        this.currentRootNode = targetNode;
+        this.renderVisualization();
+      }
+    }
+
+    renderScatter() {
+      const plotContainer = document.getElementById('scatter-plot');
+      
+      // Prepare 3D scatter data with visibility filter
+      const traces = this.data.children
+        .map(cluster => {
+          const companiesInCluster = cluster.children.filter(c => 
+            c.x !== null && c.x !== undefined && 
+            c.y !== null && c.y !== undefined && 
+            c.z !== null && c.z !== undefined
+          );
+
+          return {
+            x: companiesInCluster.map(c => c.x),
+            y: companiesInCluster.map(c => c.y),
+            z: companiesInCluster.map(c => c.z),
+            mode: 'markers',
+            type: 'scatter3d',
+            name: cluster.name,
+            text: companiesInCluster.map(c => 
+              `Cluster: ${cluster.name}<br>${c.name}${c.sector ? '<br>(' + c.sector + ')' : ''}`
+            ),
+            hoverinfo: 'text',
+            marker: {
+              size: 5,
+              color: this.colors[cluster.name],
+              opacity: 0.8
+            },
+            visible: this.visibleClusters.has(cluster.name)
+          };
+        });
+
+      const layout = {
+        margin: { l: 0, r: 0, b: 0, t: 40 },
+        scene: {
+          xaxis: { title: 'X' },
+          yaxis: { title: 'Y' },
+          zaxis: { title: 'Z' }
+        },
+        showlegend: false,
+        paper_bgcolor: 'rgba(0,0,0,0)',
+        plot_bgcolor: 'rgba(0,0,0,0)',
+        font: { color: 'currentColor' }
+      };
+
+      const config = { responsive: true, displayModeBar: false };
+      Plotly.react(plotContainer, traces, layout, config);
+      
+      // Show/hide custom legend based on screen size
+      this.renderScatterLegend();
+    }
+
+    renderScatterLegend() {
+      const isMobile = window.innerWidth <= 500;
+      const legendContainer = document.getElementById('scatter-legend');
+      
+      
+      if (!isMobile) {
+        legendContainer.classList.remove('hidden');
+        this.renderCustomScatterLegend();
+      } else {
+        legendContainer.classList.add('hidden');
+      }
+    }
+
+    renderCustomScatterLegend() {
+      const legendItemsContainer = document.getElementById('scatter-legend-items');
+      if (!legendItemsContainer) return;
+      
+      legendItemsContainer.innerHTML = '';
+      
+      // Initialize expanded states if not exists
+      if (!this.expandedClusters) {
+        this.expandedClusters = new Set();
+      }
+
+      // Sort clusters by number of companies (descending)
+      const sortedClusters = [...this.data.children].sort((a, b) => b.children.length - a.children.length);
+
+      sortedClusters.forEach(cluster => {
+        const isVisible = this.visibleClusters.has(cluster.name);
+        const companyCount = cluster.children.length;
+        const clusterId = `cluster-${cluster.name.replace(/\s+/g, '-').replace(/[^a-z0-9\-]/gi, '').toLowerCase()}`;
+        const isExpanded = this.expandedClusters.has(cluster.name);
+        
+        const legendItem = document.createElement('div');
+        legendItem.className = `p-3 rounded-lg border transition-all duration-200 hover:shadow-md ${
+          isVisible
+            ? 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-600 shadow-sm'
+            : 'bg-gray-50 dark:bg-gray-900 border-gray-100 dark:border-gray-800 opacity-60'
+        }`;
+        
+        // Function to render companies based on expanded state
+        const renderCompanies = () => {
+          if (!isVisible) return '';
+          
+          if (cluster.children.length <= 3) {
+            return `
+              <div id="${clusterId}-companies" class="mt-2 flex flex-wrap gap-1">
+                ${cluster.children.map(company => 
+                  `<span class="px-2 py-1 text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded">
+                    ${company.name}
+                  </span>`
+                ).join('')}
+              </div>
+            `;
+          }
+          
+          if (isExpanded) {
+            return `
+              <div id="${clusterId}-companies" class="mt-2 flex flex-wrap gap-1">
+                ${cluster.children.map(company => 
+                  `<span class="px-2 py-1 text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded">
+                    ${company.name}
+                  </span>`
+                ).join('')}
+                <span class="px-2 py-1 text-xs text-blue-400 dark:text-blue-500 cursor-pointer hover:text-blue-600 dark:hover:text-blue-300 transition-colors" 
+                       id="${clusterId}-expand" 
+                       data-cluster="${cluster.name}">
+                  Réduire
+                </span>
+              </div>
+            `;
+          } else {
+            return `
+              <div id="${clusterId}-companies" class="mt-2 flex flex-wrap gap-1">
+                ${cluster.children.slice(0, 3).map(company => 
+                  `<span class="px-2 py-1 text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded">
+                    ${company.name}
+                  </span>`
+                ).join('')}
+                <span class="px-2 py-1 text-xs text-gray-400 dark:text-gray-500 cursor-pointer hover:text-gray-600 dark:hover:text-gray-300 transition-colors" 
+                       id="${clusterId}-expand" 
+                       data-cluster="${cluster.name}">
+                  +${cluster.children.length - 3}
+                </span>
+              </div>
+            `;
+          }
+        };
+        
+        legendItem.innerHTML = `
+          <div class="flex items-center justify-between mb-2 cursor-pointer" data-cluster="${cluster.name}">
+            <div class="flex items-center">
+              <div
+                class="w-4 h-4 rounded-full mr-3 border-2 border-white shadow-sm ${isVisible ? 'opacity-100' : 'opacity-50'}"
+                style="background-color: ${this.colors[cluster.name] || '#cccccc'}"
+              ></div>
+              <span class="font-medium text-sm ${isVisible ? 'text-gray-900 dark:text-white' : 'text-gray-500 dark:text-gray-400'}">
+                ${cluster.name}
+              </span>
+            </div>
+            <div class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium ${
+              isVisible
+                ? 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300'
+                : 'bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400'
+            }">
+              ${isVisible ? '👁' : ''}
+            </div>
+          </div>
+          <div class="text-xs ${isVisible ? 'text-gray-600 dark:text-gray-300' : 'text-gray-400 dark:text-gray-500'}">
+            ${companyCount} entreprise${companyCount > 1 ? 's' : ''}
+          </div>
+          ${renderCompanies()}
+        `;
+        
+        // Event listener pour toggle visibility
+        const toggleArea = legendItem.querySelector(`[data-cluster="${cluster.name}"]`);
+        toggleArea.addEventListener('click', (e) => {
+          e.stopPropagation();
+          this.handleScatterLegendClick(cluster.name);
+        });
+        
+        // Event listener pour expand companies
+        if (cluster.children.length > 3 && isVisible) {
+          const expandButton = legendItem.querySelector(`#${clusterId}-expand`);
+          if (expandButton) {
+            expandButton.addEventListener('click', (e) => {
+              e.stopPropagation();
+              this.toggleClusterExpansion(cluster.name);
+            });
+          }
+        }
+        
+        legendItemsContainer.appendChild(legendItem);
+      });
+      
+      // Setup show/hide all buttons (remove existing listeners first)
+      const showAllBtn = document.getElementById('scatter-show-all');
+      const hideAllBtn = document.getElementById('scatter-hide-all');
+      
+      showAllBtn.replaceWith(showAllBtn.cloneNode(true));
+      hideAllBtn.replaceWith(hideAllBtn.cloneNode(true));
+      
+      document.getElementById('scatter-show-all').addEventListener('click', () => {
+        this.data.children.forEach(cluster => {
+          this.visibleClusters.add(cluster.name);
+        });
+        this.updateScatterVisibility();
+        this.renderCustomScatterLegend();
+      });
+
+      document.getElementById('scatter-hide-all').addEventListener('click', () => {
+        this.visibleClusters.clear();
+        this.updateScatterVisibility();
+        this.renderCustomScatterLegend();
+      });
+    }
+
+    handleScatterLegendClick(clusterName) {
+      if (this.visibleClusters.has(clusterName)) {
+        this.visibleClusters.delete(clusterName);
+      } else {
+        this.visibleClusters.add(clusterName);
+      }
+      // Only update scatter plot visibility without re-rendering everything
+      this.updateScatterVisibility();
+      this.renderCustomScatterLegend();
+    }
+
+    updateScatterVisibility() {
+      const plotContainer = document.getElementById('scatter-plot');
+      if (!plotContainer) return;
+
+      // Update visibility of existing traces
+      const updates = [];
+      const traceIndices = [];
+      
+      this.data.children.forEach((cluster, index) => {
+        updates.push(this.visibleClusters.has(cluster.name));
+        traceIndices.push(index);
+      });
+
+      // Use Plotly.restyle to update visibility without losing camera position
+      Plotly.restyle(plotContainer, { visible: updates }, traceIndices);
+    }
+
+    toggleClusterExpansion(clusterName) {
+      if (this.expandedClusters.has(clusterName)) {
+        this.expandedClusters.delete(clusterName);
+      } else {
+        this.expandedClusters.add(clusterName);
+      }
+      // Re-render only the custom legend to reflect the change
+      this.renderCustomScatterLegend();
+    }
+
+    renderLegend() {
+      const legendContainer = document.getElementById('legend-items');
+      legendContainer.innerHTML = '';
+
+      this.data.children.forEach(cluster => {
+        const isVisible = this.visibleClusters.has(cluster.name);
+        const item = document.createElement('div');
+        item.className = `flex items-center justify-between rounded-md p-2 hover:bg-gray-100 dark:hover:bg-gray-700 ${isVisible ? '' : 'opacity-50'}`;
+        
+        item.innerHTML = `
+          <div class="flex items-center">
+            <div class="mr-2 h-3 w-3 rounded-full" style="background-color: ${this.colors[cluster.name]}"></div>
+            <span class="${isVisible ? '' : 'text-gray-400'}">${cluster.name}</span>
+          </div>
+          <input type="checkbox" ${isVisible ? 'checked' : ''} class="cluster-toggle" />
+        `;
+
+        item.querySelector('.cluster-toggle').addEventListener('change', (e) => {
+          if (e.target.checked) {
+            this.visibleClusters.add(cluster.name);
+          } else {
+            this.visibleClusters.delete(cluster.name);
+          }
+          this.renderVisualization();
+        });
+
+        legendContainer.appendChild(item);
+      });
+    }
+
+    showError() {
+      const loadingState = document.getElementById('loading-state');
+      loadingState.innerHTML = `
+        <div class="text-center">
+          <div class="text-red-500 text-4xl mb-4">⚠️</div>
+          <p class="text-gray-600 dark:text-gray-300">Erreur lors du chargement des données</p>
+        </div>
+      `;
+    }
+  }
+
+  // Global variable for breadcrumb navigation
+  let visualization;
+
+  // Initialize when DOM is loaded
+  document.addEventListener('DOMContentLoaded', () => {
+    visualization = new ClusteringVisualization();
+  });
+</script>
+
+<style>
+  /* Custom styles for clustering visualization */
+  .bg-primary {
+    background-color: rgb(59 130 246);
+  }
+  
+  .text-primary-foreground {
+    color: white;
+  }
+  
+  .bg-secondary {
+    background-color: rgb(156 163 175);
+  }
+  
+  .text-secondary-foreground {
+    color: rgb(55 65 81);
+  }
+  
+  .dark .bg-secondary {
+    background-color: rgb(75 85 99);
+  }
+  
+  .dark .text-secondary-foreground {
+    color: rgb(243 244 246);
+  }
+
+  #treemap-svg {
+    font-family: 'Inter', sans-serif;
+  }
+
+  .node-group:hover rect {
+    stroke-width: 2px;
+  }
+  
+  .cluster-toggle {
+    cursor: pointer;
+  }
+
+  /* Loading animations */
+  @keyframes pulse {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: .5;
+    }
+  }
+
+  .animate-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+</style>

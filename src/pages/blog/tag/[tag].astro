@@ -1,0 +1,63 @@
+---
+import { getCollection } from 'astro:content'
+import Layout from '../../../layouts/Layout.astro'
+import Tags from '../../../components/Tags.astro'
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog')
+  const tags = [...new Set(posts.flatMap(post => post.data.tags || []))]
+  
+  return tags.map(tag => ({
+    params: { tag },
+    props: { 
+      posts: posts.filter(post => post.data.tags?.includes(tag))
+    }
+  }))
+}
+
+const { tag } = Astro.params
+const { posts } = Astro.props
+---
+
+<Layout 
+  title={`Articles sur ${tag} | Dino Lakisic`}
+  description={`Découvrez tous les articles sur le thème ${tag}`}
+>
+  <main class="max-w-4xl mx-auto px-4 py-12">
+    <h1 class="text-4xl font-bold mb-8">Articles sur {tag}</h1>
+    
+    <div class="grid gap-8">
+      {posts.map(post => (
+        <article class="group">
+          <a href={`/blog/${post.slug}`} 
+             class="block bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-lg 
+                    transition-all duration-300 hover:shadow-xl">
+            {post.data.image && (
+              <img 
+                src={post.data.image} 
+                alt={post.data.title}
+                class="w-full h-48 object-cover"
+              />
+            )}
+            <div class="p-6">
+              <h2 class="text-2xl font-bold mb-2 group-hover:text-yellow-500">
+                {post.data.title}
+              </h2>
+              <time class="text-sm text-gray-500 dark:text-gray-400">
+                {new Date(post.data.date).toLocaleDateString('fr-FR', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric'
+                })}
+              </time>
+              <p class="mt-4 text-gray-600 dark:text-gray-300">
+                {post.data.description}
+              </p>
+              {post.data.tags && <Tags tags={post.data.tags} class="mt-4" />}
+            </div>
+          </a>
+        </article>
+      ))}
+    </div>
+  </main>
+</Layout> 

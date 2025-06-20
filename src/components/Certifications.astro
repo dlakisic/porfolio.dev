@@ -1,0 +1,233 @@
+---
+import Python from "./icons/Python.astro"
+import GoogleSheets from "./icons/GoogleSheets.astro"
+import Streamlit from "./icons/Streamlit.astro"
+import Link from "./icons/Link.astro"
+import LinkButton from "./LinkButton.astro"
+import Lepoool from "./icons/Lepoool.astro"
+import Scikit_learn from "./icons/Scikit_learn.astro"
+import Keras from "./icons/Keras.astro"
+import Apache_Spark from "./icons/Apache_Spark.astro"
+import Pandas from "./icons/Pandas.astro"
+import Airflow from "./icons/Airflow.astro"
+import Git from "./icons/Git.astro"
+import NumPy from "./icons/NumPy.astro"
+import Matplotlib from "./icons/Matplotlib.astro"
+import Seaborn from "./icons/Seaborn.astro"
+import PostgreSQL from "./icons/PostgreSQL.astro"
+import Pytest from "./icons/Pytest.astro"
+import Bash from "./icons/Bash.astro"
+import { useTranslations, getCurrentLanguage } from '../i18n/utils'
+import CertificationsIcon from "./icons/CertificationsIcon.astro"
+
+const currentLang = getCurrentLanguage()
+const t = useTranslations(currentLang)
+
+const TAGS = {
+  PYTHON: {
+    name: "Python",
+    class: "bg-black/80 dark:bg-[#306998] text-white",
+    icon: Python,
+  },
+  GOOGLE_SHEETS: {
+    name: "Google Sheets",
+    class: "bg-black/80 dark:bg-[#306998] text-white",
+    icon: GoogleSheets,
+  },
+  STREAMLIT: {
+    name: "Streamlit",
+    class: "bg-black/80 dark:bg-[#306998] text-white",
+    icon: Streamlit,
+  },
+  LEPOOOL: {
+    name: "Le Poool",
+    class: "bg-black/80 dark:bg-[#306998] text-white",
+    icon: Lepoool,
+  },
+  SCIKIT_LEARN: {
+    name: "Scikit Learn",
+    class: "bg-black/80 dark:bg-[#306998] text-white",
+    icon: Scikit_learn,
+  },
+  KERAS: {
+    name: "Keras",
+    class: "bg-black/80 dark:bg-[#306998] text-white",
+    icon: Keras,
+  },
+  APACHE_SPARK: {
+    name: "PySpark",
+    class: "bg-black/80 dark:bg-[#306998] text-white",
+    icon: Apache_Spark,
+  },
+  PANDAS: {
+    name: "Pandas",
+    class: "bg-black/80 dark:bg-[#306998] text-white",
+    icon: Pandas,
+  },
+  AIRFLOW: {
+    name: "Airflow",
+    class: "bg-black/80 dark:bg-[#306998] text-white",
+    icon: Airflow,
+  },
+  GIT: {
+    name: "Git",
+    class: "bg-black/80 dark:bg-[#306998] text-white",
+    icon: Git,
+  },
+  NUMPY: {
+    name: "NumPy",
+    class: "bg-black/80 dark:bg-[#306998] text-white",
+    icon: NumPy,
+  },
+  MATPLOTLIB: {
+    name: "Matplotlib",
+    class: "bg-black/80 dark:bg-[#306998] text-white",
+    icon: Matplotlib,
+  },
+  SEABORN: {
+    name: "Seaborn",
+    class: "bg-black/80 dark:bg-[#306998] text-white",
+    icon: Seaborn,
+  },
+  SQL: {
+    name: "PostgreSQL",
+    class: "bg-black/80 dark:bg-[#306998] text-white",
+    icon: PostgreSQL,
+  },
+  PYTEST: {
+    name: "Pytest",
+    class: "bg-black/80 dark:bg-[#306998] text-white",
+    icon: Pytest,
+  },
+  BASH: {
+    name: "Bash",
+    class: "bg-black/80 dark:bg-[#306998] text-white",
+    icon: Bash,
+  },
+}
+
+const CERTIFICATIONS = [
+  {
+    id: "ml_engineer",
+    title: t('certifications.ml_engineer_title'),
+    description: t('certifications.ml_engineer_description'),
+    link: "https://www.datacamp.com/completed/statement-of-accomplishment/track/ab798796bdaeaed4e8056e25739c0d0425e0b286",
+    image: "/certificates/ML_engineer.webp",
+    tags: [TAGS.PYTHON, TAGS.SCIKIT_LEARN, TAGS.KERAS, TAGS.APACHE_SPARK],
+  },
+  {
+    id: "data_engineer",
+    title: t('certifications.data_engineer_title'),
+    description: t('certifications.data_engineer_description'),
+    link: "https://www.datacamp.com/completed/statement-of-accomplishment/track/1768668b6881c85d7f3baaa422a3eade902afaf6",
+    image: "/certificates/Datacamp_certificate_DE.webp",
+    tags: [TAGS.PYTHON, TAGS.SQL, TAGS.PANDAS, TAGS.AIRFLOW, TAGS.GIT],
+  },
+  {
+    id: "data_scientist",
+    title: t('certifications.data_scientist_title'),
+    description: t('certifications.data_scientist_description'),
+    link: "https://www.datacamp.com/completed/statement-of-accomplishment/track/8cdf81119f36b1c96bafe18100b5dbd25e8258fe",
+    image: "/certificates/Datacamp_certificate_DS.webp",
+    tags: [TAGS.PYTHON, TAGS.PANDAS, TAGS.NUMPY, TAGS.MATPLOTLIB, TAGS.SEABORN],
+  },
+  {
+    id: "python_programmer",
+    title: t('certifications.python_programmer_title'),
+    description: t('certifications.python_programmer_description'),
+    link: "https://www.datacamp.com/completed/statement-of-accomplishment/track/438a0c4509aa3fc15f2c66bec390a5a4c5aa0511",
+    image: "/certificates/Datacamp_certificate_PP.webp",
+    tags: [TAGS.PYTHON, TAGS.BASH, TAGS.PYTEST],
+  },
+  {
+    id: "data_analyst",
+    title: t('certifications.data_analyst_title'),
+    description: t('certifications.data_analyst_description'),
+    link: "https://www.datacamp.com/completed/statement-of-accomplishment/track/926fb203c7688785a87ad69873e3170d704f8b81",
+    image: "/certificates/Datacamp_certificate_DA.webp",
+    tags: [TAGS.PYTHON, TAGS.PANDAS, TAGS.MATPLOTLIB, TAGS.SEABORN],
+  },
+]
+---
+
+<div class="flex flex-col gap-y-16">
+  {
+    CERTIFICATIONS.map(({ id, image, title, description, tags, link }) => (
+      <article class="flex flex-col space-x-0 space-y-8 group md:flex-row md:space-x-8 md:space-y-0">
+        <div class="w-full md:w-1/2">
+          <div class="relative flex flex-col items-center col-span-6 row-span-5 gap-8 transition duration-500 ease-in-out transform shadow-xl overflow-clip rounded-xl sm:rounded-xl md:group-hover:-translate-y-1 md:group-hover:shadow-2xl lg:border lg:border-gray-800 lg:hover:border-gray-700 lg:hover:bg-gray-800/50">
+            <img alt={title} class="object-cover object-top w-full h-56 transition duration-500 sm:h-full md:scale-110 md:group-hover:scale-105" loading="lazy" src={image} />
+          </div>
+        </div>
+
+        <div class="w-full md:w-1/2 md:max-w-lg">
+          <h3 class="text-2xl font-bold text-gray-800 dark:text-gray-100 flex items-center gap-3" data-translate={`certifications.${id}_title`}>
+            <CertificationsIcon class="size-8" />
+            {title}
+          </h3>
+          <div class="flex flex-wrap mt-2">
+            <ul class="flex flex-wrap mb-2 gap-2">
+              {tags.map((tag) => (
+                <li>
+                  <span
+                    class={`flex gap-x-2 rounded-full text-xs ${tag.class} py-1 px-2 whitespace-nowrap`}
+                  >
+                    <tag.icon class="size-4" />
+                    {tag.name}
+                  </span>
+                </li>
+              ))}
+            </ul>
+
+            <div class="mt-2 text-gray-700 dark:text-gray-400" data-translate={`certifications.${id}_description`}>
+              {description}
+            </div>
+            <footer class="flex items-end justify-start mt-4 gap-x-4">
+              {link && (
+                <LinkButton href={link}>
+                  <Link class="size-4" />
+                  <span data-translate="certifications.view_button">{t('certifications.view_button')}</span>
+                </LinkButton>
+              )}
+            </footer>
+          </div>
+        </div>
+      </article>
+    ))
+  }
+</div>
+
+<script>
+  import { getAvailableTranslations } from '../i18n/utils'
+  
+  const translations = getAvailableTranslations()
+  type LanguageKey = 'fr' | 'en'
+
+  function updateTranslations() {
+    const lang = (localStorage.getItem('lang') || 'fr') as LanguageKey
+    const elements = document.querySelectorAll<HTMLElement>('[data-translate]')
+    
+    elements.forEach(el => {
+      const key = el.getAttribute('data-translate')
+      if (key) {
+        const [section, item] = key.split('.')
+        try {
+          const sectionData = translations[lang]?.[section as keyof typeof translations[LanguageKey]]
+          const translation = sectionData?.[item]
+          if (typeof translation === 'string') {
+            el.textContent = translation
+          }
+        } catch (error) {
+          console.warn(`Translation missing for ${key} in ${lang}`)
+        }
+      }
+    })
+  }
+
+  document.addEventListener('astro:page-load', updateTranslations)
+  window.addEventListener('storage', (e) => {
+    if (e.key === 'lang') {
+      updateTranslations()
+    }
+  })
+</script>

@@ -1,0 +1,149 @@
+---
+import ProgressBar from './ProgressBar.astro';
+import FormStep from './FormStep.astro';
+---
+
+<div id="lead-form-container" class="max-w-2xl mx-auto">
+  <div class="bg-white dark:bg-gray-900 rounded-lg shadow-2xl border border-gray-200 dark:border-gray-700 p-8">
+    <!-- Social Proof -->
+    <div class="flex items-center justify-center gap-4 mb-4 flex-wrap">
+      <span class="inline-flex items-center gap-1 px-2 py-1 text-xs bg-gray-200 dark:bg-gray-700 rounded">
+        👥 50+ entreprises
+      </span>
+      <span class="inline-flex items-center gap-1 px-2 py-1 text-xs bg-gray-200 dark:bg-gray-700 rounded">
+        ⏱️ 3 min
+      </span>
+      <span class="inline-flex items-center gap-1 px-2 py-1 text-xs bg-gray-200 dark:bg-gray-700 rounded">
+        ✅ 98% satisfaits
+      </span>
+    </div>
+
+    <h2 class="text-2xl md:text-3xl font-bold text-blue-600 dark:text-blue-400 text-center mb-2" id="step-title">
+      👤 Vos informations
+    </h2>
+    <p class="text-lg text-center opacity-80 mb-4" id="step-description">
+      Qui êtes-vous ?
+    </p>
+
+    <ProgressBar />
+
+    <form id="lead-form" class="space-y-6">
+      <FormStep 
+        stepId="step-1" 
+        fields={[
+          { name: 'name', label: 'Nom complet', placeholder: 'Ex: Jean Dupont', type: 'text', required: true },
+          { name: 'email', label: 'Email professionnel', placeholder: 'Ex: jean.dupont@entreprise.com', type: 'email', required: true },
+          { name: 'company', label: 'Entreprise', placeholder: 'Ex: Ma Société SAS', type: 'text', required: true }
+        ]}
+        nextButtonId="btn-next-1"
+        showPrevButton={false}
+      />
+
+      <FormStep 
+        stepId="step-2" 
+        fields={[
+          { 
+            name: 'sector', 
+            label: 'Secteur d\'activité', 
+            type: 'select', 
+            required: true,
+            options: [
+              { value: '', label: 'Sélectionnez votre secteur' },
+              { value: 'Conseil Stratégique', label: 'Conseil Stratégique' },
+              { value: 'Sales/Marketing', label: 'Sales/Marketing' },
+              { value: 'Juridique/Finance', label: 'Juridique/Finance' },
+              { value: 'E-commerce', label: 'E-commerce' },
+              { value: 'SaaS/Tech', label: 'SaaS/Tech' },
+              { value: 'Autre', label: 'Autre' }
+            ]
+          },
+          { 
+            name: 'teamSize', 
+            label: 'Taille équipe concernée par l\'IA', 
+            type: 'select', 
+            required: true,
+            options: [
+              { value: '', label: 'Sélectionnez la taille' },
+              { value: '1-5', label: '1-5' },
+              { value: '6-10', label: '6-10' },
+              { value: '11-20', label: '11-20' },
+              { value: '21-50', label: '21-50' },
+              { value: '50+', label: '50+' }
+            ]
+          },
+          { 
+            name: 'timeline', 
+            label: 'Timeline projet envisagée', 
+            type: 'select', 
+            required: true,
+            options: [
+              { value: '', label: 'Sélectionnez la timeline' },
+              { value: 'Moins de 3 mois', label: 'Moins de 3 mois' },
+              { value: '3-6 mois', label: '3-6 mois' },
+              { value: '6-12 mois', label: '6-12 mois' },
+              { value: 'Plus de 12 mois', label: 'Plus de 12 mois' },
+              { value: 'Exploratoire', label: 'Exploratoire / Pas de timeline définie' }
+            ]
+          }
+        ]}
+        nextButtonId="btn-next-2"
+        prevButtonId="btn-prev-2"
+        showPrevButton={true}
+      />
+
+      <FormStep 
+        stepId="step-3" 
+        fields={[
+          { 
+            name: 'budget', 
+            label: 'Budget estimé pour un projet GenAI', 
+            type: 'select', 
+            required: true,
+            options: [
+              { value: '', label: 'Sélectionnez une fourchette budgétaire' },
+              { value: 'Moins de 5 000€', label: 'Moins de 5 000€' },
+              { value: '5 000€ - 15 000€', label: '5 000€ - 15 000€' },
+              { value: '15 000€ - 50 000€', label: '15 000€ - 50 000€' },
+              { value: 'Plus de 50 000€', label: 'Plus de 50 000€' },
+              { value: 'Non défini / Flexible', label: 'Non défini / Flexible' }
+            ]
+          },
+          { 
+            name: 'challenge', 
+            label: 'Principal défi business actuel', 
+            placeholder: 'Décrivez en quelques mots le principal défi que vous souhaitez relever ou l\'opportunité que vous souhaitez saisir avec la GenAI.', 
+            type: 'textarea', 
+            required: true 
+          },
+          { 
+            name: 'website', 
+            label: 'Site web (Optionnel)', 
+            placeholder: 'https://www.monentreprise.com', 
+            type: 'url', 
+            required: false 
+          }
+        ]}
+        prevButtonId="btn-prev-3"
+        showPrevButton={true}
+        isSubmitStep={true}
+      />
+    </form>
+  </div>
+</div>
+
+<style>
+  .step-content {
+    animation: fadeInUp 0.3s ease-out;
+  }
+  
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style> 

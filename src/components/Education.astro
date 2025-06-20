@@ -1,0 +1,47 @@
+---
+import EducationItem from "./EducationItem.astro"
+import { useTranslations, getCurrentLanguage } from '@/i18n/utils'
+
+const currentLang = getCurrentLanguage()
+const t = useTranslations(currentLang)
+
+const EDUCATION = [
+  {
+    id: "msc",
+    date: t('education.msc_date'),
+    diploma: t('education.msc_title'),
+    school: t('education.msc_school'),
+    description: t('education.msc_description'),
+    skills: t('education.msc_skills'),
+    link: "https://www.efrei.fr/programmes-experts/msc-data-management/"
+  },
+  {
+    id: "mba",
+    date: t('education.mba_date'),
+    diploma: t('education.mba_title'),
+    school: t('education.mba_school'),
+    description: t('education.mba_description'),
+    skills: t('education.mba_skills'),
+    link: "https://www.mydigitalschool.com/mba-e-business"
+  },
+  {
+    id: "bachelor",
+    date: t('education.bachelor_date'),
+    diploma: t('education.bachelor_title'),
+    school: t('education.bachelor_school'),
+    description: t('education.bachelor_description'),
+    skills: t('education.bachelor_skills'),
+    link: "https://www.egcnormandie.fr/formation_programme"
+  }
+]
+---
+
+<ol class="relative mt-16">
+  {
+    EDUCATION.map((education) => (
+      <li class="">
+        <EducationItem {...education} />
+      </li>
+    ))
+  }
+</ol>

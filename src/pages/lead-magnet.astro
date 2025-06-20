@@ -1,0 +1,425 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import SectionContainer from "@/components/SectionContainer.astro";
+---
+
+<Layout
+  title="Diagnostic GenAI - Votre Canvas Personnalisé"
+  description="Découvrez le potentiel de l'IA générative pour votre entreprise en quelques étapes. Diagnostic personnalisé gratuit en 3 minutes."
+>
+  <main class="px-4">
+    <!-- Hero Section -->
+    <SectionContainer class="py-16 md:py-24">
+      <div class="text-center max-w-4xl mx-auto">
+        <div class="inline-block px-4 py-2 bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300 rounded-full text-sm font-medium mb-6 animate-pulse">
+          🚀 Diagnostic GenAI Gratuit
+        </div>
+        
+        <h1 class="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+          Votre Diagnostic GenAI Simplifié
+        </h1>
+        
+        <p class="text-xl text-gray-700 dark:text-gray-300 mb-8 max-w-2xl mx-auto">
+          Découvrez le potentiel de l'IA générative pour votre entreprise en quelques étapes
+        </p>
+        
+        <div class="flex flex-wrap justify-center gap-6 mb-8 text-sm text-gray-600 dark:text-gray-400">
+          <span class="flex items-center gap-2">
+            👥 <strong>50+ entreprises accompagnées</strong>
+          </span>
+          <span class="flex items-center gap-2">
+            📈 <strong>+40% de productivité moyenne</strong>
+          </span>
+        </div>
+        
+        <p class="text-lg text-gray-600 dark:text-gray-400 mb-8">
+          En 3 minutes, découvrez comment l'IA générative peut transformer votre activité
+        </p>
+        
+        <div class="grid md:grid-cols-3 gap-4 max-w-2xl mx-auto mb-8">
+          <div class="text-green-600 dark:text-green-400">✓ Diagnostic personnalisé</div>
+          <div class="text-green-600 dark:text-green-400">✓ Cas d'usage sectoriels</div>
+          <div class="text-green-600 dark:text-green-400">✓ ROI estimé</div>
+        </div>
+        
+        <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg max-w-md mx-auto">
+          <blockquote class="text-gray-700 dark:text-gray-300 italic">
+            "Le diagnostic nous a permis d'identifier 3 cas d'usage prioritaires. Notre productivité a augmenté de 35% en 2 mois."
+          </blockquote>
+          <cite class="block mt-3 text-sm text-gray-500 dark:text-gray-400">
+            — Sarah M., Directrice Marketing
+          </cite>
+        </div>
+      </div>
+    </SectionContainer>
+
+    <!-- Lead Form Section -->
+    <SectionContainer class="py-16">
+      <div class="max-w-2xl mx-auto">
+        <div id="lead-form-container" class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
+          <!-- Progress Bar -->
+          <div class="mb-8">
+            <div class="flex justify-between text-sm text-gray-500 dark:text-gray-400 mb-2">
+              <span>Étape <span id="current-step">1</span> sur 3</span>
+              <span><span id="progress-percent">33</span>%</span>
+            </div>
+            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+              <div id="progress-bar" class="bg-gradient-to-r from-purple-600 to-blue-600 h-2 rounded-full transition-all duration-300" style="width: 33%"></div>
+            </div>
+          </div>
+
+          <!-- Step 1: Personal Information -->
+          <div id="step-1" class="step-content">
+            <h2 class="text-2xl font-bold mb-6 text-gray-900 dark:text-white">
+              Parlez-nous de vous
+            </h2>
+            
+            <form class="space-y-4">
+              <div>
+                <label class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Nom complet *</label>
+                <input type="text" id="fullName" required class="form-input w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 dark:bg-gray-700 dark:text-white">
+              </div>
+              
+              <div>
+                <label class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Email professionnel *</label>
+                <input type="email" id="email" required class="form-input w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 dark:bg-gray-700 dark:text-white">
+              </div>
+              
+              <div>
+                <label class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Entreprise *</label>
+                <input type="text" id="company" required class="form-input w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 dark:bg-gray-700 dark:text-white">
+              </div>
+            </form>
+            
+            <button id="next-step-1" class="btn-primary w-full mt-6 bg-gradient-to-r from-purple-600 to-blue-600 text-white py-3 px-6 rounded-lg font-medium hover:opacity-90 transition-opacity">
+              Continuer →
+            </button>
+          </div>
+
+          <!-- Step 2: Business Context -->
+          <div id="step-2" class="step-content hidden">
+            <h2 class="text-2xl font-bold mb-6 text-gray-900 dark:text-white">
+              Votre contexte entreprise
+            </h2>
+            
+            <form class="space-y-4">
+              <div>
+                <label class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Secteur d'activité</label>
+                <select id="sector" class="form-input w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 dark:bg-gray-700 dark:text-white">
+                  <option value="">Sélectionnez votre secteur</option>
+                  <option value="conseil">Conseil Stratégique</option>
+                  <option value="sales-marketing">Sales/Marketing</option>
+                  <option value="juridique-finance">Juridique/Finance</option>
+                  <option value="ecommerce">E-commerce</option>
+                  <option value="saas-tech">SaaS/Tech</option>
+                  <option value="autre">Autre</option>
+                </select>
+              </div>
+              
+              <div>
+                <label class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Taille équipe concernée par l'IA</label>
+                <select id="teamSize" class="form-input w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 dark:bg-gray-700 dark:text-white">
+                  <option value="">Sélectionnez la taille</option>
+                  <option value="1-5">1-5 personnes</option>
+                  <option value="6-10">6-10 personnes</option>
+                  <option value="11-20">11-20 personnes</option>
+                  <option value="21-50">21-50 personnes</option>
+                  <option value="50+">Plus de 50 personnes</option>
+                </select>
+              </div>
+              
+              <div>
+                <label class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Timeline projet</label>
+                <select id="timeline" class="form-input w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 dark:bg-gray-700 dark:text-white">
+                  <option value="">Sélectionnez votre timeline</option>
+                  <option value="moins-3-mois">Moins de 3 mois</option>
+                  <option value="3-6-mois">3-6 mois</option>
+                  <option value="6-12-mois">6-12 mois</option>
+                  <option value="plus-12-mois">Plus de 12 mois</option>
+                  <option value="exploratoire">Exploratoire</option>
+                </select>
+              </div>
+            </form>
+            
+            <div class="flex gap-4 mt-6">
+              <button id="prev-step-2" class="btn-secondary flex-1 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 py-3 px-6 rounded-lg font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                ← Retour
+              </button>
+              <button id="next-step-2" class="btn-primary flex-1 bg-gradient-to-r from-purple-600 to-blue-600 text-white py-3 px-6 rounded-lg font-medium hover:opacity-90 transition-opacity">
+                Continuer →
+              </button>
+            </div>
+          </div>
+
+          <!-- Step 3: Project Details -->
+          <div id="step-3" class="step-content hidden">
+            <h2 class="text-2xl font-bold mb-6 text-gray-900 dark:text-white">
+              Votre projet
+            </h2>
+            
+            <form class="space-y-4">
+              <div>
+                <label class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Budget estimé</label>
+                <select id="budget" class="form-input w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 dark:bg-gray-700 dark:text-white">
+                  <option value="">Sélectionnez votre budget</option>
+                  <option value="moins-5k">Moins de 5 000€</option>
+                  <option value="5k-15k">5 000€ - 15 000€</option>
+                  <option value="15k-50k">15 000€ - 50 000€</option>
+                  <option value="plus-50k">Plus de 50 000€</option>
+                  <option value="non-defini">Non défini</option>
+                </select>
+              </div>
+              
+              <div>
+                <label class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Principal défi business</label>
+                <textarea id="challenge" rows="4" class="form-input w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 dark:bg-gray-700 dark:text-white resize-none" placeholder="Décrivez votre principal défi business..."></textarea>
+              </div>
+              
+              <div>
+                <label class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Site web (optionnel)</label>
+                <input type="url" id="website" class="form-input w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 dark:bg-gray-700 dark:text-white">
+              </div>
+            </form>
+            
+            <div class="flex gap-4 mt-6">
+              <button id="prev-step-3" class="btn-secondary flex-1 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 py-3 px-6 rounded-lg font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                ← Retour
+              </button>
+              <button id="generate-canvas" class="btn-primary flex-1 bg-gradient-to-r from-purple-600 to-blue-600 text-white py-3 px-6 rounded-lg font-medium hover:opacity-90 transition-opacity">
+                🔓 Débloquer mon Canvas Lite
+              </button>
+            </div>
+          </div>
+
+          <!-- Social Proof -->
+          <div class="flex justify-center gap-6 mt-8 text-sm text-gray-500 dark:text-gray-400">
+            <span>👥 50+ entreprises</span>
+            <span>⏱️ 3 min</span>
+            <span>✅ 98% satisfaits</span>
+          </div>
+        </div>
+
+        <!-- Canvas Display (Initially Hidden) -->
+        <div id="canvas-display" class="hidden bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 mt-8">
+          <div class="text-center mb-8">
+            <h2 class="text-3xl font-bold mb-4 text-gray-900 dark:text-white">
+              ✨ Félicitations <span id="canvas-name"></span>!
+            </h2>
+            <p class="text-xl text-gray-600 dark:text-gray-400 mb-4">
+              Votre Canvas GenAI personnalisé pour <span id="canvas-sector"></span>
+            </p>
+            <div class="text-green-600 dark:text-green-400 font-medium">
+              100% Généré ✓
+            </div>
+          </div>
+
+          <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-6 mb-8">
+            <div class="text-center text-gray-600 dark:text-gray-400">
+              [Canvas GenAI personnalisé généré ici]
+            </div>
+          </div>
+
+          <div class="flex flex-wrap justify-center gap-4 mb-8">
+            <button class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+              📥 Télécharger PDF
+            </button>
+            <button class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+              📤 Partager
+            </button>
+            <button class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+              📖 Guide complet
+            </button>
+          </div>
+
+          <div class="bg-gradient-to-r from-yellow-50 to-orange-50 dark:from-yellow-900 dark:to-orange-900 border border-yellow-200 dark:border-yellow-700 rounded-lg p-6">
+            <h3 class="font-bold text-yellow-800 dark:text-yellow-200 mb-2">Prochaines étapes recommandées:</h3>
+            <ul class="text-yellow-700 dark:text-yellow-300 space-y-1">
+              <li>• Audit détaillé de vos processus actuels</li>
+              <li>• Mise en place d'un pilote sur un cas d'usage prioritaire</li>
+              <li>• Formation de vos équipes aux outils GenAI</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </SectionContainer>
+
+    <!-- Final CTA -->
+    <SectionContainer class="py-16">
+      <div class="bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl p-8 text-center text-white">
+        <div class="mb-4">
+          <span class="inline-block bg-white/20 text-white px-4 py-2 rounded-full text-sm font-medium">
+            ⏰ Offre limitée - 3 places restantes ce mois
+          </span>
+        </div>
+        
+        <h2 class="text-3xl font-bold mb-4">
+          Prêt pour l'audit complet ?
+        </h2>
+        
+        <p class="text-xl mb-6 opacity-90">
+          Rejoignez les 20+ entreprises de votre secteur qui ont déjà transformé leur activité avec l'IA générative
+        </p>
+        
+        <button class="bg-white text-purple-600 px-8 py-4 rounded-lg font-bold text-lg hover:bg-gray-100 transition-colors">
+          📈 Réserver mon audit gratuit (30 min)
+        </button>
+      </div>
+    </SectionContainer>
+  </main>
+</Layout>
+
+<script>
+  class LeadMagnetManager {
+    constructor() {
+      this.currentStep = 1;
+      this.formData = {};
+      this.init();
+    }
+
+    init() {
+      this.bindEvents();
+    }
+
+    bindEvents() {
+      // Step 1
+      document.getElementById('next-step-1')?.addEventListener('click', () => {
+        if (this.validateStep1()) {
+          this.saveStep1Data();
+          this.showStep(2);
+        }
+      });
+
+      // Step 2
+      document.getElementById('prev-step-2')?.addEventListener('click', () => {
+        this.showStep(1);
+      });
+
+      document.getElementById('next-step-2')?.addEventListener('click', () => {
+        this.saveStep2Data();
+        this.showStep(3);
+      });
+
+      // Step 3
+      document.getElementById('prev-step-3')?.addEventListener('click', () => {
+        this.showStep(2);
+      });
+
+      document.getElementById('generate-canvas')?.addEventListener('click', () => {
+        this.saveStep3Data();
+        this.generateCanvas();
+      });
+    }
+
+    validateStep1() {
+      const fullName = document.getElementById('fullName').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const company = document.getElementById('company').value.trim();
+
+      if (!fullName || !email || !company) {
+        alert('Veuillez remplir tous les champs obligatoires.');
+        return false;
+      }
+
+      return true;
+    }
+
+    saveStep1Data() {
+      this.formData.fullName = document.getElementById('fullName').value;
+      this.formData.email = document.getElementById('email').value;
+      this.formData.company = document.getElementById('company').value;
+    }
+
+    saveStep2Data() {
+      this.formData.sector = document.getElementById('sector').value;
+      this.formData.teamSize = document.getElementById('teamSize').value;
+      this.formData.timeline = document.getElementById('timeline').value;
+    }
+
+    saveStep3Data() {
+      this.formData.budget = document.getElementById('budget').value;
+      this.formData.challenge = document.getElementById('challenge').value;
+      this.formData.website = document.getElementById('website').value;
+    }
+
+    showStep(step) {
+      // Hide all steps
+      document.querySelectorAll('.step-content').forEach(el => {
+        el.classList.add('hidden');
+      });
+
+      // Show current step
+      document.getElementById(`step-${step}`).classList.remove('hidden');
+
+      // Update progress
+      this.currentStep = step;
+      document.getElementById('current-step').textContent = step;
+      const progressPercent = (step / 3) * 100;
+      document.getElementById('progress-percent').textContent = Math.round(progressPercent);
+      document.getElementById('progress-bar').style.width = `${progressPercent}%`;
+    }
+
+    generateCanvas() {
+      // Hide form
+      document.getElementById('lead-form-container').classList.add('hidden');
+      
+      // Show canvas
+      const canvasDisplay = document.getElementById('canvas-display');
+      canvasDisplay.classList.remove('hidden');
+      
+      // Populate canvas data
+      document.getElementById('canvas-name').textContent = this.formData.fullName.split(' ')[0];
+      document.getElementById('canvas-sector').textContent = this.getSectorLabel(this.formData.sector);
+      
+      // Scroll to canvas
+      canvasDisplay.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    getSectorLabel(sector) {
+      const sectors = {
+        'conseil': 'le Conseil Stratégique',
+        'sales-marketing': 'le Sales/Marketing',
+        'juridique-finance': 'le Juridique/Finance',
+        'ecommerce': 'l\'E-commerce',
+        'saas-tech': 'le SaaS/Tech',
+        'autre': 'votre secteur'
+      };
+      return sectors[sector] || 'votre secteur';
+    }
+  }
+
+  // Initialize when DOM is loaded
+  document.addEventListener('DOMContentLoaded', () => {
+    new LeadMagnetManager();
+  });
+</script>
+
+<style>
+  .form-input:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(147, 51, 234, 0.1);
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(147, 51, 234, 0.3);
+  }
+
+  .btn-secondary:hover {
+    transform: translateY(-1px);
+  }
+
+  .step-content {
+    animation: fadeIn 0.3s ease-in-out;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>

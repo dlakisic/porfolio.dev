@@ -1,0 +1,91 @@
+---
+import Layout from '../../layouts/Layout.astro'
+import { getCollection } from 'astro:content'
+import FeaturedPosts from '../../components/FeaturedPosts.astro'
+import Tags from '../../components/Tags.astro'
+import { useTranslations } from '../../i18n/utils'
+
+const t = useTranslations()
+
+// Récupérer tous les articles
+const allPosts = await getCollection('blog')
+
+// Séparer les articles à la une des articles réguliers
+const regularPosts = allPosts
+  .filter(post => !post.data.featured)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+---
+
+<Layout title={`${t('blog.title')} | Dino Lakisic`} description={t('blog.description')}>
+  <main class="max-w-6xl mx-auto px-4 pt-24 pb-12">
+    <h1 class="text-5xl font-bold mb-3" data-translate="blog.title">{t('blog.title')}</h1>
+    <p class="text-xl text-gray-600 dark:text-gray-400 mb-6" data-translate="blog.description">
+      {t('blog.description')}
+    </p>
+
+    <FeaturedPosts />
+
+    <div class="mt-16">
+      <h2 class="text-2xl font-bold mb-8" data-translate="blog.allPosts">{t('blog.allPosts')}</h2>
+      <div class="grid gap-8 md:grid-cols-2">
+        {regularPosts.map(post => (
+          <article class="group relative" data-article data-lang={post.data.lang}>
+            {/* Bloc d'arrière-plan */}
+            <div class="absolute inset-4 bg-white/5 dark:bg-white/5 rounded-lg blur-sm"></div>
+            
+            {/* Image */}
+            <div class="relative mb-6">
+              <a href={`/blog/${post.slug}`} class="block">
+                <img 
+                  src={post.data.image} 
+                  alt={post.data.title}
+                  class="w-full h-64 object-cover rounded-lg shadow-lg"
+                />
+              </a>
+            </div>
+
+            {/* Contenu */}
+            <div class="relative bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-lg p-6 shadow-lg">
+              <a href={`/blog/${post.slug}`} class="block">
+                <h3 class="text-xl font-bold mb-2 group-hover:text-yellow-500">
+                  {post.data.title}
+                </h3>
+                <time class="text-sm text-gray-500 dark:text-gray-400">
+                  {new Date(post.data.date).toLocaleDateString(post.data.lang === 'fr' ? 'fr-FR' : 'en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                  })}
+                </time>
+                <p class="mt-4 text-gray-600 dark:text-gray-300">
+                  {post.data.description}
+                </p>
+                {post.data.tags && <Tags tags={post.data.tags} class="mt-4" />}
+              </a>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </main>
+</Layout>
+
+<script>
+  function updateVisiblePosts() {
+    const currentLang = localStorage.getItem('lang') || 'fr'
+    const articles = document.querySelectorAll('[data-article]')
+    
+    articles.forEach(article => {
+      const articleLang = article.getAttribute('data-lang')
+      article.classList.toggle('hidden', articleLang !== currentLang)
+    })
+  }
+
+  document.addEventListener('astro:page-load', updateVisiblePosts)
+
+  window.addEventListener('storage', (e) => {
+    if (e.key === 'lang') {
+      updateVisiblePosts()
+    }
+  })
+</script>

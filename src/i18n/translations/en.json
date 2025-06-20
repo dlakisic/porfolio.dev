@@ -1,0 +1,257 @@
+{
+  "hero": {
+    "title": "Hey, I'm Dino",
+    "role": "Gen AI Engineer",
+    "location": "Based in Rennes, France 🇫🇷",
+    "description": "I help service companies boost productivity and create more value for their clients through AI.",
+    "badge": "Available for new opportunities",
+    "book_meeting": "Book a meeting"
+  },
+  "nav": {
+    "linkedin": "LinkedIn",
+    "github": "Github",
+    "contact": "Contact me",
+    "calendar": "Book appointment"
+  },
+  "sections": {
+    "services": "Services",
+    "experience": "Professional Experience",
+    "education": "Education",
+    "projects": "Projects",
+    "certifications": "Certifications",
+    "about": "About"
+  },
+  "header": {
+    "experience": "Experience",
+    "education": "Education",
+    "projects": "Projects",
+    "certifications": "Certifications",
+    "about": "About",
+    "contact": "Contact",
+    "blog": "Blog"
+  },
+  "experience": {
+    "additi_date": "November 2023 - May 2025",
+    "additi_role": "Gen AI Engineer",
+    "additi_company": "Additi Media",
+    "additi_description": {
+      "intro": "I transformed operational challenges into AI innovations. In 18 months, I automated critical business processes, reducing processing times by 60 to 83% depending on use cases.",
+      "projects": [
+        {
+          "title": "🚀 Sales Meeting Preparation Automation",
+          "items": [
+            { "label": "Challenge", "text": "60min preparation = barrier to systematic preparation" },
+            { "label": "Solution", "text": "Reduced to 10min = crossing the adoption threshold" },
+            { "label": "Transformation", "text": "Increased number of prepared meetings and quality" },
+            { "label": "Impact", "text": "100 sales reps adopt a new qualitative practice" }
+          ]
+        },
+        {
+          "title": "🛡️ AI Advertising Compliance System",
+          "items": [
+            { "label": "Challenge", "text": "Partial manual control on 70,000 ads/month = legal risks" },
+            { "label": "Solution", "text": "Automated scan of 100% creations before broadcast" },
+            { "label": "Transformation", "text": "From partial control to comprehensive coverage" },
+            { "label": "Impact", "text": "Zero non-compliance risk + peace of mind for studio team" }
+          ]
+        },
+        {
+          "title": "💬 Sales Training Chatbot",
+          "items": [
+            { "label": "Challenge", "text": "Disparate training for sales and customer care teams = uneven skill development" },
+            { "label": "Solution", "text": "AI assistant available 24/7 for training and support" },
+            { "label": "Transformation", "text": "Standardization of training support" },
+            { "label": "Impact", "text": "Homogeneous skill development + instant support" }
+          ]
+        },
+        {
+          "title": "⚡ Advertising Creation Automation",
+          "items": [
+            { "label": "Challenge", "text": "60min creation per ad = studio bottleneck" },
+            { "label": "Solution", "text": "Prototype theoretically reducing to 20min production" },
+            { "label": "Learning", "text": "Technical performance validated, adoption failure (poor UX)" },
+            { "label": "Lesson", "text": "The best technical solution is worthless without user experience" }
+          ]
+        }
+      ]
+    },
+    
+    "vinci_date": "July - September 2023",
+    "vinci_role": "Data Manager",
+    "vinci_company": "Vinci Facilities",
+    "vinci_description": "I administered a SAP database, created dashboards and initiated the creation of an inventory management system.",
+    
+    "imago_date": "September 2020 - March 2023",
+    "imago_role": "Data / IT Project Manager",
+    "imago_company": "Ima.Go",
+    "imago_description": {
+      "intro": "I industrialized prospecting and optimized technical infrastructure. As head of tools and IT, I transformed manual processes into automated commercial machines.",
+      "projects": [
+        {
+          "title": "🎯 Multi-Channel Prospecting Automation",
+          "items": [
+            { "label": "Challenge", "text": "Manual prospecting = limited volume and random results" },
+            { "label": "Solution", "text": "LinkedIn + Cold Email orchestration via specialized tools (Waalaxy, Lemlist...)" },
+            { "label": "Transformation", "text": "From artisanal approach to industrialized commercial machine" },
+            { "label": "Impact", "text": "Multiplied volume of prospects reached + personalization at scale" }
+          ]
+        },
+        {
+          "title": "🔍 Scraping & Enrichment Pipeline",
+          "items": [
+            { "label": "Challenge", "text": "Incomplete prospect data = poor performing campaigns" },
+            { "label": "Solution", "text": "Automated collection (Phantombuster, Apify) + enrichment (Hunter, Dropcontact)" },
+            { "label": "Transformation", "text": "Quality prospect database continuously fed" },
+            { "label": "Impact", "text": "Improved conversion rates thanks to qualified data" }
+          ]
+        },
+        {
+          "title": "📊 Automated Client & Finance Dashboards",
+          "items": [
+            { "label": "Challenge", "text": "Manual reporting = time loss + lack of real-time visibility" },
+            { "label": "Solution", "text": "Automated dashboards for client campaigns + ROI financial tracking" },
+            { "label": "Transformation", "text": "From weekly reporting to real-time monitoring" },
+            { "label": "Impact", "text": "Optimized management + reinforced commercial reactivity" }
+          ]
+        },
+        {
+          "title": "⚙️ Technical Infrastructure & In-House Solution",
+          "items": [
+            { "label": "Challenge", "text": "Dependence on external tools + specific needs not covered" },
+            { "label": "Solution", "text": "Managed development of proprietary LinkedIn solution + internal communication migration" },
+            { "label": "Transformation", "text": "Increased technical autonomy of the agency" },
+            { "label": "Impact", "text": "Complete control of technical stack + centralized IT management" }
+          ]
+        }
+      ]
+    }
+  },
+  "education": {
+    "msc_date": "September 2022 - March 2024",
+    "msc_title": "Msc Data Management",
+    "msc_school": "Paris School of Business / EFREI",
+    "msc_description": "The MSc Big Data Management trained me at the intersection of management and massive data analysis. I acquired skills in programming, AI and digital strategy, enabling me to lead data projects and create value for organizations through data-driven approaches.",
+    "msc_skills": "Python · SQL · Machine Learning · Deep Learning · LLMs · Prompt Engineering · Data Analysis · Data Visualization",
+    
+    "mba_date": "September 2020 - June 2022",
+    "mba_title": "MBA Expert in Digital Marketing",
+    "mba_school": "My Digital School",
+    "mba_description": "The MBA Expert Digital Marketing trained me in e-business, digital marketing and web entrepreneurship. I acquired skills in digital strategy, management and finance, enabling me to understand business challenges in the digital environment and contribute effectively to companies' digital transformation.",
+    "mba_skills": "Digital Marketing · SEO · SEA · Social Media · Analytics · Growth Hacking · CRM · Web Marketing",
+    
+    "bachelor_date": "September 2016 - June 2019",
+    "bachelor_title": "Bachelor in Business and Management",
+    "bachelor_school": "EGC Normandie",
+    "bachelor_description": "The Bachelor in Business and Management trained me in marketing, management and commerce. I acquired skills enabling me to lead projects and contribute effectively to company growth.",
+    "bachelor_skills": "Marketing · Management · Commerce · Project Management · Communication · Sales · Negotiation",
+    "learn_more": "Learn more"
+  },
+  "projects": {
+    "clustering_title": "Le Poool Ecosystem Clustering",
+    "clustering_description": "Analysis platform for Le Poool ecosystem companies (French-Tech Rennes / Saint-Malo). Machine Learning for automatic clustering, generative AI for cluster naming. Modern interface with custom treemap enabling interactive detail display and 3D visualizations.",
+    
+    "budget_title": "Budget Tracking - Crédit Agricole Google Sheets",
+    "budget_description": "Automation of data retrieval from the Crédit Agricole application for expense and income tracking.",
+    
+    "ips_title": "Analysis of French Schools' Social Position Index",
+    "ips_description": "Project carried out as part of a course, it allows visualization of Social Position Index data for French educational institutions.",
+    
+    "hackathon_ft_title": "French Tech 10th Anniversary Hackathon",
+    "hackathon_ft_description": "In 24h, we created a solution that adapts newspaper articles to different audiences using AI. We won 1st prize.",
+    
+    "hackathon_additi_title": "Additi Internal Hackathon",
+    "hackathon_additi_description": "In 24h, we created a solution dedicated to client acquisition. We won 1st prize.",
+    
+    "code_button": "Code",
+    "preview_button": "Preview",
+    "learn_more_button": "Learn more"
+  },
+  "certifications": {
+    "langchain_title": "LangChain & Vector Databases in Production",
+    "langchain_description": "Training on using LangChain and vector databases in production.",
+    
+    "deeplearning_title": "Deep Learning Specialization",
+    "deeplearning_description": "Deep Learning specialization by Andrew Ng, covering neural networks, optimization, CNNs and RNNs.",
+    
+    "prompt_title": "ChatGPT Prompt Engineering for Developers",
+    "prompt_description": "Training on prompt engineering for developers, by DeepLearning.AI and OpenAI.",
+    
+    "building_title": "Building Systems with the ChatGPT API",
+    "building_description": "Training on building systems with the ChatGPT API, by DeepLearning.AI and OpenAI.",
+    
+    "ml_engineer_title": "Machine Learning Engineer with Python",
+    "ml_engineer_description": "Advanced training covering a broad spectrum of Machine Learning techniques, from supervised to deep learning. Develops applicable expertise from predictive analysis to advanced AI.",
+    
+    "data_engineer_title": "Data Engineer in Python",
+    "data_engineer_description": "Complete training in data engineering, from import to ETL/ELT pipeline deployment. Develops skills in flow automation and scalable data infrastructure design.",
+    
+    "data_scientist_title": "Data Scientist with Python",
+    "data_scientist_description": "Complete program combining theoretical foundations and practical applications in data science. Focus on solving real problems with essential Python libraries.",
+    
+    "python_programmer_title": "Python Programmer",
+    "python_programmer_description": "In-depth Python programming course, from data manipulation to advanced development practices. Aims for complete mastery for various applications in data science.",
+    
+    "data_analyst_title": "Data Analyst with Python",
+    "data_analyst_description": "Targeted training on data analysis, covering manipulation, visualization and statistical inference. Develops the ability to extract insights and make data-driven decisions.",
+    
+    "view_button": "View certificate"
+  },
+  "about": {
+    "intro": "Dino Lakisic, ",
+    "role": "Gen AI Engineer",
+    "role_description": " who transforms your ",
+    "keyword_1": "operational challenges",
+    "role_end": " into ",
+    "keyword_2": "competitive advantages",
+    "role_final": ".",
+    
+    "approach_intro": "My approach: combining ",
+    "keyword_3": "technical expertise",
+    "approach_mid": " and deep ",
+    "keyword_4": "business understanding",
+    "approach_end": ". AI should amplify humans, not replace them. From Python to no-code tools, I design solutions that free your teams from technical constraints so they can excel in their field of expertise.",
+    
+    "value_intro": "I help you gain ",
+    "keyword_5": "productivity and competitiveness",
+    "value_mid": " through ",
+    "keyword_6": "generative AI",
+    "value_end": ". Smart prospecting, optimized workflows, automated reports... my solutions adapt to your specific challenges. Less time on repetitive tasks, more focus on your ",
+    "keyword_7": "business expertise",
+    "final": " and your clients."
+  },
+  "services": {
+    "automation_title": "Process Automation",
+    "automation_description": "Transform your repetitive tasks into automated workflows. Business process optimization, automatic validation and intelligent reporting to free your teams.",
+    "automation_highlight_1": "Sales meeting preparation automation (60min → 10min)",
+    "automation_highlight_2": "Automated validation and compliance workflows",
+    "automation_highlight_3": "Data pipelines and automated reporting",
+    
+    "ai_integration_title": "Generative AI Integration",
+    "ai_integration_description": "Automate your client deliverables with generative AI. Accelerate your consulting processes, optimize the quality of your analyses and multiply your production capacity.",
+    "ai_integration_highlight_1": "Automated generation of client reports and analyses",
+    "ai_integration_highlight_2": "Validation and compliance systems for your deliverables",
+    "ai_integration_highlight_3": "Custom AI tools for your methodologies",
+    
+    "lead_generation_title": "Scraping & Lead Generation",
+    "lead_generation_description": "Boost your lead generation campaigns with premium data. Massive collection, intelligent enrichment and delivery of ultra-qualified prospect databases.",
+    "lead_generation_highlight_1": "Large-scale automated multi-source collection",
+    "lead_generation_highlight_2": "Advanced prospect enrichment and scoring",
+    "lead_generation_highlight_3": "Databases ready for your client campaigns",
+    
+    "consulting_title": "AI Strategic Consulting",
+    "consulting_description": "Support your clients in AI with our technical expertise. Develop new services, strengthen your commercial proposals and stand out from the competition.",
+    "consulting_highlight_1": "Co-development of AI offerings for your clients",
+    "consulting_highlight_2": "Technical support for your AI missions",
+    "consulting_highlight_3": "Training your teams in AI technologies"
+  },
+  "footer": {
+    "rights": "Some rights reserved"
+  },
+  "blog": {
+    "title": "Blog",
+    "description": "Discover the latest articles on AI and development",
+    "featured": "Featured",
+    "allPosts": "All articles",
+    "readMore": "Read more"
+  }
+}

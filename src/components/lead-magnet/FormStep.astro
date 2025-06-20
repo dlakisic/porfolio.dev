@@ -1,0 +1,82 @@
+---
+export interface Props {
+  stepId: string;
+  fields: Array<{
+    name: string;
+    label: string;
+    placeholder?: string;
+    type: 'text' | 'email' | 'url' | 'select' | 'textarea';
+    required: boolean;
+    options?: Array<{ value: string; label: string }>;
+  }>;
+  nextButtonId?: string;
+  prevButtonId?: string;
+  showPrevButton: boolean;
+  isSubmitStep?: boolean;
+}
+
+const { stepId, fields, nextButtonId, prevButtonId, showPrevButton, isSubmitStep = false } = Astro.props;
+---
+
+<div id={stepId} class="step-content hidden">
+  <div class="space-y-6">
+    {fields.map(field => (
+      <div class="space-y-2">
+        <label for={field.name} class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+          {field.label}
+          {field.required && <span class="text-red-500 ml-1">*</span>}
+        </label>
+        {field.type === 'select' ? (
+          <select 
+            id={field.name} 
+            name={field.name} 
+            class="form-input" 
+            required={field.required}
+          >
+            <option value="">Sélectionnez une option</option>
+            {field.options?.map(option => (
+              <option value={option.value}>{option.label}</option>
+            ))}
+          </select>
+        ) : field.type === 'textarea' ? (
+          <textarea 
+            id={field.name} 
+            name={field.name} 
+            rows="4" 
+            placeholder={field.placeholder}
+            class="form-input" 
+            required={field.required}>
+          </textarea>
+        ) : (
+          <input 
+            type={field.type} 
+            id={field.name} 
+            name={field.name} 
+            placeholder={field.placeholder}
+            class="form-input" 
+            required={field.required}>
+        )}
+      </div>
+    ))}
+  </div>
+  
+  <div class="flex justify-between items-center mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
+    {showPrevButton && prevButtonId ? (
+      <button type="button" class="btn-secondary flex items-center gap-2" id={prevButtonId}>
+        ←  Retour
+      </button>
+    ) : (
+      <div></div>
+    )}
+    
+    {isSubmitStep ? (
+      <button type="submit" class="btn-primary flex items-center gap-2" id="submit-btn">
+        🔓 Débloquer mon Canvas Lite
+      </button>
+    ) : nextButtonId && (
+      <button type="button" class="btn-primary flex items-center gap-2" id={nextButtonId}>
+        Continuer →
+      </button>
+    )}
+  </div>
+</div> 

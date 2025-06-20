@@ -1,0 +1,111 @@
+---
+import { useTranslations } from '../i18n/utils'
+
+const currentLocale = Astro.currentLocale || 'fr'
+
+const LOCALES = {
+  fr: 'FR',
+  en: 'EN'
+} as const
+
+const LOCALES_URLS = {
+  fr: '/',
+  en: '/en'
+}
+
+const currentPath = Astro.url.pathname
+---
+
+<div class="relative inline-block">
+  <button
+    id="language-button"
+    class="relative hover:text-yellow-500 dark:hover:text-yellow-400 transition text-gray-600 dark:text-gray-200"
+  >
+    <span id="current-lang">{LOCALES[currentLocale]}</span>
+  </button>
+  <div
+    id="language-dropdown"
+    class="absolute hidden scale-80 top-8 right-0 text-sm p-1 min-w-[8rem] rounded-md border border-gray-100 bg-white/90 dark:bg-gray-900/90 dark:border-gray-500/20 shadow-[0_3px_10px_rgb(0,0,0,0.2)] backdrop-blur-md"
+  >
+    <ul>
+      {Object.entries(LOCALES).map(([locale, label]) => (
+        <li class="language-menu-option px-2 py-1.5 cursor-default hover:bg-neutral-400/40 dark:hover:bg-gray-500/50 rounded-sm" data-lang={locale} data-label={label}>
+          {label}
+        </li>
+      ))}
+    </ul>
+  </div>
+</div>
+
+<style>
+  #language-dropdown.open {
+    display: inline;
+    animation: scale-up-center 0.15s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  }
+
+  @keyframes scale-up-center {
+    from {
+      transform: scale(0.8);
+      opacity: 0;
+    }
+
+    to {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+</style>
+
+<script>
+const LOCALES = {
+  fr: 'FR',
+  en: 'EN'
+}
+
+const button = document.getElementById('language-button')
+const dropdown = document.getElementById('language-dropdown')
+const currentLangSpan = document.getElementById('current-lang')
+
+if (button && dropdown && currentLangSpan) {
+  const currentLang = localStorage.getItem('lang') || 'fr'
+  currentLangSpan.textContent = LOCALES[currentLang]
+  
+  button.addEventListener('click', (e) => {
+    e.stopPropagation()
+    // Close theme menu if open
+    const themesMenu = document.getElementById('themes-menu')
+    if (themesMenu) {
+      themesMenu.classList.remove('open')
+    }
+    
+    const isClosed = !dropdown.classList.contains('open')
+    dropdown.classList[isClosed ? 'add' : 'remove']('open')
+    dropdown.classList[isClosed ? 'remove' : 'add']('hidden')
+  })
+
+  dropdown.querySelectorAll('.language-menu-option').forEach(langButton => {
+    langButton.addEventListener('click', (e) => {
+      const target = e.target as HTMLElement
+      const newLang = target.dataset.lang || 'fr'
+      const label = target.dataset.label || LOCALES[newLang]
+      
+      localStorage.setItem('lang', newLang)
+      currentLangSpan.textContent = label
+      dropdown.classList.add('hidden')
+      dropdown.classList.remove('open')
+      
+      window.dispatchEvent(new StorageEvent('storage', {
+        key: 'lang',
+        newValue: newLang,
+        oldValue: currentLang,
+        storageArea: localStorage
+      }))
+    })
+  })
+
+  document.addEventListener('click', () => {
+    dropdown.classList.add('hidden')
+    dropdown.classList.remove('open')
+  })
+}
+</script>

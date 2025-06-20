@@ -1,18 +1,26 @@
 ---
 import Layout from "@/layouts/Layout.astro"
+import { useTranslations, getCurrentLanguage } from '@/i18n/utils'
 
 import AboutMe from "@/components/AboutMe.astro"
 import Briefcase from "@/components/icons/Briefcase.astro"
+import Cap from "@/components/icons/Cap.astro"
 import CodeIcon from "@/components/icons/Code.astro"
 import Experience from "@/components/Experience.astro"
+import Education from "@/components/Education.astro"
 import ProfileCheck from "@/components/icons/ProfileCheck.astro"
 import Projects from "@/components/Projects.astro"
 import SectionContainer from "@/components/SectionContainer.astro"
 import Hero from "@/components/Hero.astro"
+import CertificationsIcon from "@/components/icons/Certifications.astro"
+import Certifications from "@/components/Certifications.astro"
+
+const currentLang = getCurrentLanguage()
+const t = useTranslations(currentLang)
 ---
 
 <Layout
-  title="Porfolio de midudev - Desarrollador y Programador Web con 15 años de experiencia"
+  title="Porfolio de Dino Lakisic - AI Engineer à Rennes"
   description="Contrata a midudev para crear tu aplicación web o móvil. Desarrollador Web y Creador de Contenido. Especializado en crear aplicaciones únicas."
 >
   <main class="px-4">
@@ -22,32 +30,52 @@ import Hero from "@/components/Hero.astro"
     </Hero>
     </SectionContainer>
     <div class="space-y-24">
-    <SectionContainer id="experiencia">
+    <SectionContainer id="experience">
       <h2
         class="flex items-center mb-6 text-3xl font-semibold gap-x-3 text-black/80 dark:text-white"
       >
         <Briefcase class="size-8" />
-        Experiencia laboral
+        <span data-i18n="sections.experience">{t("sections.experience")}</span>
       </h2>
       <Experience />
     </SectionContainer>
 
-    <SectionContainer id="proyectos">
+    <SectionContainer id="education">
+      <h2
+        class="flex items-center mb-6 text-3xl font-semibold gap-x-3 text-black/80 dark:text-white"
+      >
+        <Cap class="size-8" />
+        <span data-i18n="sections.education">{t("sections.education")}</span>
+      </h2>
+      <Education />
+    </SectionContainer>
+
+    <SectionContainer id="projets">
       <h2
         class="flex items-center mb-6 text-3xl font-semibold gap-x-3 text-black/80 dark:text-white"
       >
         <CodeIcon class="size-7" />
-        Proyectos
+        <span data-i18n="sections.projects">{t("sections.projects")}</span>
       </h2>
       <Projects />
     </SectionContainer>
 
-    <SectionContainer id="sobre-mi">
+    <SectionContainer id="certifications">
+      <h2
+        class="flex items-center mb-6 text-3xl font-semibold gap-x-3 text-black/80 dark:text-white"
+      >
+        <CertificationsIcon class="size-7" />
+        <span data-i18n="sections.certifications">{t("sections.certifications")}</span>
+      </h2>
+      <Certifications />
+    </SectionContainer>
+
+    <SectionContainer id="a-propos">
       <h2
         class="flex items-center mb-6 text-3xl font-semibold gap-x-8 text-black/80 dark:text-white"
       >
         <ProfileCheck class="size-8" />
-        Sobre mí
+        <span data-i18n="sections.about">{t("sections.about")}</span>
       </h2>
       <AboutMe />
     </SectionContainer>

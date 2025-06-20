@@ -1,0 +1,257 @@
+{
+  "hero": {
+    "title": "Hey, moi c'est Dino",
+    "role": "Gen AI Engineer",
+    "location": "Basé à Rennes, France 🇫🇷",
+    "description": "J'aide les entreprises de services à gagner en productivité et créer plus de valeur pour leurs clients grâce à l'IA.",
+    "badge": "Disponible pour de nouvelles opportunités",
+    "book_meeting": "Prendre rendez-vous"
+  },
+  "nav": {
+    "linkedin": "LinkedIn",
+    "github": "Github",
+    "contact": "Me contacter",
+    "calendar": "Prendre RDV"
+  },
+  "sections": {
+    "services": "Services",
+    "experience": "Expériences professionnelles",
+    "education": "Formation",
+    "projects": "Projets",
+    "certifications": "Certifications",
+    "about": "À propos"
+  },
+  "header": {
+    "experience": "Experience",
+    "education": "Formation",
+    "projects": "Projets",
+    "certifications": "Certifications",
+    "about": "À propos",
+    "contact": "Contact",
+    "blog": "Blog"
+  },
+  "experience": {
+    "additi_date": "Novembre 2023 - Mai 2025",
+    "additi_role": "Gen AI Engineer",
+    "additi_company": "Additi Media",
+    "additi_description": {
+      "intro": "J'ai transformé les défis opérationnels en innovations IA. En 18 mois, j'ai automatisé les processus critiques de l'entreprise, réduisant les temps de traitement de 60 à 83% selon les cas d'usage.",
+      "projects": [
+        {
+          "title": "🚀 Automatisation préparation RDV commerciaux",
+          "items": [
+            { "label": "Challenge", "text": "60min de prépa = frein à la préparation systématique" },
+            { "label": "Solution", "text": "Réduction à 10min = franchissement du seuil d'adoption" },
+            { "label": "Transformation", "text": "Augmentation du nombre de rendez-vous préparés et de la qualité" },
+            { "label": "Impact", "text": "100 commerciaux adoptent une nouvelle pratique qualitative" }
+          ]
+        },
+        {
+          "title": "🛡️ Système de conformité publicitaire IA",
+          "items": [
+            { "label": "Challenge", "text": "Contrôle manuel partiel sur 70 000 pubs/mois = risques juridiques" },
+            { "label": "Solution", "text": "Scan automatisé 100% des créations avant diffusion" },
+            { "label": "Transformation", "text": "Passage d'un contrôle partiel à une couverture exhaustive" },
+            { "label": "Impact", "text": "Zéro risque de non-conformité + sérénité équipe studio" }
+          ]
+        },
+        {
+          "title": "💬 Chatbot de formation commerciale",
+          "items": [
+            { "label": "Challenge", "text": "Formation disparate des équipes sales et customer care = montée en compétences inégale" },
+            { "label": "Solution", "text": "Assistant IA disponible 24/7 pour entraînement et support" },
+            { "label": "Transformation", "text": "Standardisation de l'accompagnement formation" },
+            { "label": "Impact", "text": "Montée en compétence homogène + support instantané" }
+          ]
+        },
+        {
+          "title": "⚡ Automatisation création publicitaire",
+          "items": [
+            { "label": "Challenge", "text": "60min de création par pub = goulot d'étranglement studio" },
+            { "label": "Solution", "text": "Prototype réduisant théoriquement à 20min de production" },
+            { "label": "Apprentissage", "text": "Performance technique validée, échec adoption (UX défaillante)" },
+            { "label": "Leçon", "text": "La meilleure solution technique ne vaut rien sans expérience utilisateur" }
+          ]
+        }
+      ]
+    },
+    
+    "vinci_date": "Juillet - Septembre 2023",
+    "vinci_role": "Data Manager",
+    "vinci_company": "Vinci Facilities",
+    "vinci_description": "J'ai pu administrer une base de données SAP, créer des tableaux de bord et initier la création d'un système de gestion de stocks.",
+    
+    "imago_date": "Septembre 2020 - Mars 2023",
+    "imago_role": "Chef de Projet Data / IT",
+    "imago_company": "Ima.Go",
+    "imago_description": {
+    "intro": "J'ai industrialisé la prospection et optimisé l'infrastructure technique. En tant que responsable des outils et de l'IT, j'ai transformé les processus manuels en machines commerciales automatisées.",
+    "projects": [
+      {
+        "title": "🎯 Automatisation Prospection Multi-Canaux",
+        "items": [
+          { "label": "Challenge", "text": "Prospection manuelle = volume limité et résultats aléatoires" },
+          { "label": "Solution", "text": "Orchestration LinkedIn + Cold Email via outils spécialisés (Waalaxy, Lemlist...)" },
+          { "label": "Transformation", "text": "Passage d'une approche artisanale à une machine commerciale industrialisée" },
+          { "label": "Impact", "text": "Démultipliation du volume de prospects touchés + personnalisation à l'échelle" }
+        ]
+      },
+      {
+        "title": "🔍 Pipeline Scraping & Enrichissement",
+        "items": [
+          { "label": "Challenge", "text": "Données prospects incomplètes = campagnes peu performantes" },
+          { "label": "Solution", "text": "Automatisation collecte (Phantombuster, Apify) + enrichissement (Hunter, Dropcontact)" },
+          { "label": "Transformation", "text": "Base de données prospects de qualité alimentée en continu" },
+          { "label": "Impact", "text": "Taux de conversion améliorés grâce à la data qualifiée" }
+        ]
+      },
+      {
+        "title": "📊 Dashboards Automatisés Client & Finance",
+        "items": [
+          { "label": "Challenge", "text": "Reporting manuel = perte de temps + manque de visibilité temps réel" },
+          { "label": "Solution", "text": "Tableaux de bord automatisés campagnes clients + suivi financier ROI" },
+          { "label": "Transformation", "text": "Passage du reporting hebdomadaire au monitoring temps réel" },
+          { "label": "Impact", "text": "Pilotage optimisé + réactivité commerciale renforcée" }
+        ]
+      },
+      {
+        "title": "⚙️ Infrastructure Technique & Solution Maison",
+        "items": [
+          { "label": "Challenge", "text": "Dépendance outils externes + besoins spécifiques non couverts" },
+          { "label": "Solution", "text": "Pilotage développement solution LinkedIn propriétaire + migration communication interne" },
+          { "label": "Transformation", "text": "Montée en autonomie technique de l'agence" },
+          { "label": "Impact", "text": "Maîtrise complète de la stack technique + gestion IT centralisée" }
+        ]
+      }
+    ]
+  }
+  },
+  "education": {
+    "msc_date": "Septembre 2022 - Mars 2024",
+    "msc_title": "Msc Data Management",
+    "msc_school": "Paris School of Business / EFREI",
+    "msc_description": "Le MSc Big Data Management m'a formé à la jonction du management et de l'analyse de données massives. J'ai acquis des compétences en programmation, IA et stratégie digitale, me permettant de piloter des projets data et de créer de la valeur pour les organisations grâce à des approches data-driven.",
+    "msc_skills": "Python · SQL · Machine Learning · Deep Learning · LLMs · Prompt Engineering · Data Analysis · Data Visualization",
+    
+    "mba_date": "Septembre 2020 - Juin 2022",
+    "mba_title": "MBA Expert en Marketing Digital",
+    "mba_school": "My Digital School",
+    "mba_description": "Le MBA Expert Marketing Digital m'a formé en e-business, marketing digital et entrepreneuriat web. J'ai acquis des compétences en stratégie digitale, management et finance, me permettant de comprendre les enjeux business dans l'environnement numérique et de contribuer efficacement à la transformation digitale des entreprises.",
+    "mba_skills": "Marketing Digital · SEO · SEA · Social Media · Analytics · Growth Hacking · CRM · Webmarketing",
+    
+    "bachelor_date": "Septembre 2016 - Juin 2019",
+    "bachelor_title": "Bachelor in Business and Management",
+    "bachelor_school": "EGC Normandie",
+    "bachelor_description": "Le Bachelor in Business and Management m'a formé en marketing, gestion et commerce. J'ai acquis des compétences me permettant de piloter des projets et de contribuer efficacement à la croissance des entreprises.",
+    "bachelor_skills": "Marketing · Management · Commerce · Gestion de projet · Communication · Vente · Négociation",
+    "learn_more": "En savoir plus"
+  },
+  "projects": {
+    "clustering_title": "Clustering Écosystème Le Poool",
+    "clustering_description": "Plateforme d'analyse de l'écosystème des entreprises du Poool (French-Tech Rennes / Saint-Malo). Machine Learning pour le clustering automatique, IA générative pour nommer les clusters. Interface moderne avec treemap personnalisée permettant l'affichage de détails interactifs et visualisations 3D.",
+    
+    "budget_title": "Budget Tracking - Crédit Agricole Google Sheets",
+    "budget_description": "Automatisation de la récupération des données de l'application Crédit Agricole pour un suivi des dépenses et des revenus.",
+    
+    "ips_title": "Anaylse de l'IPS des établissements scolaires français",
+    "ips_description": "Projet réalisé dans le cadre d'un cours, il permet de visualiser les données de l'Indice de Position Sociale des établissements scolaires français.",
+    
+    "hackathon_ft_title": "Hackathon des 10 ans de la French Tech",
+    "hackathon_ft_description": "En 24h, nous avons réalisé une solution qui permet d'adapter un article de journal à différentes audiences en utilisant l'IA. Nous avons remporté le 1er prix.",
+    
+    "hackathon_additi_title": "Hackathon interne Additi",
+    "hackathon_additi_description": "En 24h, nous avons réalisé une solution dédiée à la conquête client. Nous avons remporté le 1er prix.",
+    
+    "code_button": "Code",
+    "preview_button": "Aperçu",
+    "learn_more_button": "En savoir plus"
+  },
+  "certifications": {
+    "langchain_title": "LangChain & Vector Databases in Production",
+    "langchain_description": "Formation sur l'utilisation de LangChain et des bases de données vectorielles en production.",
+    
+    "deeplearning_title": "Deep Learning Specialization",
+    "deeplearning_description": "Spécialisation en Deep Learning par Andrew Ng, couvrant les réseaux de neurones, l'optimisation, les CNN et les RNN.",
+    
+    "prompt_title": "ChatGPT Prompt Engineering for Developers",
+    "prompt_description": "Formation sur l'ingénierie des prompts pour les développeurs, par DeepLearning.AI et OpenAI.",
+    
+    "building_title": "Building Systems with the ChatGPT API",
+    "building_description": "Formation sur la construction de systèmes avec l'API ChatGPT, par DeepLearning.AI et OpenAI.",
+    
+    "ml_engineer_title": "Machine Learning Engineer with Python",
+    "ml_engineer_description": "Formation avancée couvrant un large spectre de techniques de Machine Learning, du supervisé au deep learning. Développe une expertise applicable de l'analyse prédictive à l'IA avancée.",
+    
+    "data_engineer_title": "Data Engineer in Python",
+    "data_engineer_description": "Formation complète en ingénierie des données, de l'importation au déploiement de pipelines ETL/ELT. Développe des compétences en automatisation des flux et en conception d'infrastructures de données évolutives.",
+    
+    "data_scientist_title": "Data Scientist with Python",
+    "data_scientist_description": "Programme complet alliant fondements théoriques et applications pratiques en data science. Accent mis sur la résolution de problèmes réels avec les bibliothèques Python essentielles.",
+    
+    "python_programmer_title": "Python Programmer",
+    "python_programmer_description": "Parcours approfondi en programmation Python, de la manipulation de données aux pratiques avancées de développement. Vise une maîtrise complète pour des applications variées en data science.",
+    
+    "data_analyst_title": "Data Analyst with Python",
+    "data_analyst_description": "Formation ciblée sur l'analyse de données, couvrant la manipulation, la visualisation et l'inférence statistique. Développe la capacité à extraire des insights et à prendre des décisions data-driven.",
+    
+    "view_button": "Voir le certificat"
+  },
+  "about": {
+    "intro": "Dino Lakisic, ",
+    "role": "Gen AI Engineer",
+    "role_description": " qui transforme vos ",
+    "keyword_1": "défis opérationnels",
+    "role_end": " en ",
+    "keyword_2": "avantages concurrentiels",
+    "role_final": ".",
+    
+    "approach_intro": "Mon approche : allier ",
+    "keyword_3": "expertise technique",
+    "approach_mid": " et ",
+    "keyword_4": "compréhension business",
+    "approach_end": " profonde. L'IA doit amplifier l'humain, pas le remplacer. De Python aux outils no-code, je conçois des solutions qui libèrent vos équipes de leurs contraintes techniques pour qu'elles excellent dans leur domaine d'expertise.",
+    
+    "value_intro": "Je vous aide à gagner en ",
+    "keyword_5": "productivité et compétitivité",
+    "value_mid": " grâce à l'",
+    "keyword_6": "IA générative",
+    "value_end": ". Prospection intelligente, workflows optimisés, rapports automatisés... mes solutions s'adaptent à vos enjeux spécifiques. Moins de temps sur les tâches répétitives, plus de focus sur votre ",
+    "keyword_7": "expertise métier",
+    "final": " et vos clients."
+  },
+  "services": {
+    "automation_title": "Automatisation des Processus",
+    "automation_description": "Transformez vos tâches répétitives en workflows automatisés. Optimisation des processus métier, validation automatique et reporting intelligent pour libérer vos équipes.",
+    "automation_highlight_1": "Automatisation préparation RDV commerciaux (60min → 10min)",
+    "automation_highlight_2": "Workflows de validation et conformité automatisés",
+    "automation_highlight_3": "Pipelines de données et reporting automatisé",
+    
+    "ai_integration_title": "Intégration IA Générative",
+    "ai_integration_description": "Automatisez vos livrables clients avec l'IA générative. Accélérez vos processus de conseil, optimisez la qualité de vos analyses et multipliez votre capacité de production.",
+    "ai_integration_highlight_1": "Génération automatisée de rapports et analyses client",
+    "ai_integration_highlight_2": "Systèmes de validation et conformité pour vos livrables",
+    "ai_integration_highlight_3": "Outils IA personnalisés pour vos méthodologies",
+    
+    "lead_generation_title": "Scraping & Lead Generation",
+    "lead_generation_description": "Boostez vos campagnes de lead generation avec des données premium. Collecte massive, enrichissement intelligent et livraison de bases prospects ultra-qualifiées.",
+    "lead_generation_highlight_1": "Collecte automatisée multi-sources à grande échelle",
+    "lead_generation_highlight_2": "Enrichissement et scoring avancé des prospects",
+    "lead_generation_highlight_3": "Bases de données prêtes pour vos campagnes clients",
+    
+    "consulting_title": "Conseil Stratégique IA",
+    "consulting_description": "Accompagnez vos clients dans l'IA grâce à notre expertise technique. Développez de nouveaux services, renforcez vos propositions commerciales et démarquez-vous de la concurrence.",
+    "consulting_highlight_1": "Co-développement d'offres IA pour vos clients",
+    "consulting_highlight_2": "Support technique pour vos missions IA",
+    "consulting_highlight_3": "Formation de vos équipes aux technologies IA"
+  },
+  "footer": {
+    "rights": "Certains droits réservés"
+  },
+  "blog": {
+    "title": "Blog",
+    "description": "Découvrez les derniers articles sur l'IA et le développement",
+    "featured": "En vedette",
+    "allPosts": "Tous les articles",
+    "readMore": "Lire plus"
+  }
+} 
